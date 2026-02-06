@@ -2,7 +2,6 @@
 *.iml
 
 # Backend
-
 /backend/HELP.md
 /backend/target/
 /backend/.mvn/wrapper/maven-wrapper.jar
@@ -13,7 +12,6 @@
 /backend/.mvn
 
 # Frontend
-
 /frontend/node_modules
 /frontend/dist
 /frontend/dist-ssr
