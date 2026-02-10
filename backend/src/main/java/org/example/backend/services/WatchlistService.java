@@ -28,10 +28,7 @@ public class WatchlistService {
 
 
     public Watchlist getWatchlistById(String id) {
-        if(!repo.existsById(id)) {
-            throw new WatchlistNotFoundException(id);
-        }
-        return repo.findById(id).get();
+        return repo.findById(id).orElseThrow(() -> new WatchlistNotFoundException(id));
     }
 
 
@@ -42,10 +39,7 @@ public class WatchlistService {
 
 
     public Watchlist updateWatchlist(String id, WatchlistInDto newWatchlist) {
-        if(!repo.existsById(id)) {
-            throw new WatchlistNotFoundException(id);
-        }
-        Watchlist watchlist = repo.findById(id).get();
+        Watchlist watchlist = repo.findById(id).orElseThrow(() -> new WatchlistNotFoundException(id));
         String tempName = watchlist.name();
         String tempDescription = watchlist.description();
 
