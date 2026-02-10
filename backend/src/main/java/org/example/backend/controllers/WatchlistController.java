@@ -29,13 +29,13 @@ public class WatchlistController {
     }
 
     @PostMapping
-    public WatchlistInDto createWatchlist(@RequestBody WatchlistInDto watchlist) {
+    public Watchlist createWatchlist(@RequestBody WatchlistInDto watchlist) {
         return service.createWatchlist(watchlist);
     }
 
     @PutMapping("/{id}")
-    public Watchlist updateWatchlist(@PathVariable String id) {
-        return service.updateWatchlist(id);
+    public Watchlist updateWatchlist(@PathVariable String id, @RequestBody WatchlistInDto watchlist) {
+        return service.updateWatchlist(id, watchlist);
     }
 
     @DeleteMapping("/{id}")
