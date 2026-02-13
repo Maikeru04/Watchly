@@ -17,6 +17,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/watchlist").authenticated()
+                        .requestMatchers("/api/auth").authenticated()
                         .anyRequest().permitAll())
                 .logout(l -> l.logoutSuccessUrl("http://localhost:5173"))
                 .oauth2Login(o -> o
