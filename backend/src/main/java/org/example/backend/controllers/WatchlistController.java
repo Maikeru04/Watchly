@@ -35,11 +35,11 @@ public class WatchlistController {
 
     @PutMapping("/{id}")
     public Watchlist updateWatchlist(@PathVariable String id, @RequestBody WatchlistInDto watchlist) {
-        return service.updateWatchlist(id, watchlist);
+        return service.updateWatchlistById(id, watchlist);
     }
 
     @DeleteMapping("/{id}")
     public boolean deleteWatchlist(@PathVariable String id) {
-        return service.deleteWatchlist(id);
+        return service.deleteWatchlistById(id);
     }
 }
