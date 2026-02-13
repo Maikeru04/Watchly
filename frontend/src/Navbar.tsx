@@ -38,6 +38,9 @@ export default function Navbar({ setMovies, setLoading }: NavbarProps) {
     function navWatchlist() {
         nav("/watchlist")
     }
+    function navHome() {
+        nav("/")
+    }
 
     return (
         <div>
@@ -56,6 +59,7 @@ export default function Navbar({ setMovies, setLoading }: NavbarProps) {
                 <button type="submit">Suchen</button>
             </form>
             <button onClick={navWatchlist}>Watchlist</button>
+            <button onClick={navHome}>Home</button>
             <button onClick={login}>Login</button>
             <button onClick={logout}>Logout</button>
         </div>
