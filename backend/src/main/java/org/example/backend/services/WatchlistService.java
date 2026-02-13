@@ -33,12 +33,12 @@ public class WatchlistService {
 
 
     public Watchlist createWatchlist(WatchlistInDto watchlistDto) {
-        Watchlist watchlist = new Watchlist(generateUUID(), watchlistDto.name(), watchlistDto.description(), new ArrayList<>());
+        Watchlist watchlist = new Watchlist(generateUUID(), watchlistDto.name(), watchlistDto.description(), new ArrayList<>(), watchlistDto.type());
         return repo.save(watchlist);
     }
 
 
-    public Watchlist updateWatchlist(String id, WatchlistInDto newWatchlist) {
+    public Watchlist updateWatchlistById(String id, WatchlistInDto newWatchlist) {
         Watchlist watchlist = repo.findById(id).orElseThrow(() -> new WatchlistNotFoundException(id));
         String tempName = watchlist.name();
         String tempDescription = watchlist.description();
@@ -57,7 +57,7 @@ public class WatchlistService {
     }
 
 
-    public boolean deleteWatchlist(String id) {
+    public boolean deleteWatchlistById(String id) {
         if(!repo.existsById(id)) {
             throw new WatchlistNotFoundException(id);
         }

@@ -6,5 +6,5 @@ import org.springframework.data.annotation.Id;
 import java.util.List;
 
 @With
-public record Watchlist(@Id String id, String name, String description, List<String> itemIDs) {
+public record Watchlist(@Id String id, String name, String description, List<String> itemIDs, String type) {
 }
