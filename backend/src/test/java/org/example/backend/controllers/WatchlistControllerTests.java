@@ -89,8 +89,6 @@ public class WatchlistControllerTests {
 
     @Test
     void createWatchlist_shouldReturnNewWatchlist() throws Exception {
-        WatchlistInDto watchlist = new WatchlistInDto("Test Watchlist", "Das ist eine Test Watchlist", "MOVIE");
-
         mockMvc.perform(MockMvcRequestBuilders.post("/api/watchlist")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
