@@ -33,7 +33,7 @@ public class WatchlistService {
 
 
     public Watchlist createWatchlist(WatchlistInDto watchlistDto) {
-        Watchlist watchlist = new Watchlist(generateUUID(), watchlistDto.name(), watchlistDto.description(), new ArrayList<>());
+        Watchlist watchlist = new Watchlist(generateUUID(), watchlistDto.name(), watchlistDto.description(), new ArrayList<>(), watchlistDto.type());
         return repo.save(watchlist);
     }
 
