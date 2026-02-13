@@ -1,6 +1,5 @@
 package org.example.backend.controllers;
 
-import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.models.Watchlist;
 import org.example.backend.repositories.WatchlistRepository;
 import org.junit.jupiter.api.BeforeEach;
