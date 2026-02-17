@@ -42,4 +42,14 @@ public class WatchlistController {
     public boolean deleteWatchlist(@PathVariable String id) {
         return service.deleteWatchlistById(id);
     }
+
+    @PostMapping("/{watchlistID}/movie/{movieID}")
+    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @PathVariable String movieID) {
+        return service.addMovieToWatchlist(watchlistID, movieID);
+    }
+
+    @DeleteMapping("/{watchlistID}/movie/{movieID}")
+    public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID) {
+        return service.deleteMovieFromWatchlist(watchlistID, movieID);
+    }
 }
