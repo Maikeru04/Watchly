@@ -276,8 +276,8 @@ body {
 }
 
 .btn-loadmore {
-    display: block;            /* macht den Button zu einem Blockelement */
-    margin: 1rem auto;         /* oben/unten 1rem, links/rechts automatisch zentriert */
+    display: block;
+    margin: 1rem auto;
     padding: 0.6rem 1.2rem;
     border-radius: 12px;
     border: none;
@@ -291,8 +291,8 @@ body {
 
 .loadmore-container {
     display: flex;
-    justify-content: center;  /* horizontal zentrieren */
-    margin: 1rem 0;           /* optional Abstand oben/unten */
+    justify-content: center;
+    margin: 1rem 0;
 }
 
 .btn-loadmore:hover {
