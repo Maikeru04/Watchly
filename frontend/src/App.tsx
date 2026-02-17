@@ -14,7 +14,7 @@ function App() {
 
     useEffect(() => {
         axios
-            .get("/api/auth")
+            .get("/api/auth/me", { withCredentials: true })
             .then((r) => setUser(r.data))
             .catch(() => setUser(null));
     }, []);
