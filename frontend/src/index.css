@@ -1,0 +1,46 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: black;
+    padding: 0 1rem;
+}
+
+.navbar-left,
+.navbar-center,
+.navbar-right {
+    flex: 1;
+}
+
+.navbar-left {
+
+}
+.navbar-right {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.navbar-center {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.navbar-center form {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.navbar-center input {
+    flex: 1;
+    min-width: 0;
+}
+
+.navbar-center button {
+    flex-shrink: 0;
+}
+
