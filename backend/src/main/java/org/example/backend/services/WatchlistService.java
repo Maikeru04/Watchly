@@ -64,4 +64,28 @@ public class WatchlistService {
         repo.deleteById(id);
         return true;
     }
+
+    // MOVIE SECTION
+
+    public Watchlist addMovieToWatchlist(String watchlistID, String movieID) {
+        Watchlist watchlist = getWatchlistById(watchlistID);
+
+        List<String> updated = new ArrayList<>(watchlist.itemIDs());
+        updated.add(movieID);
+
+        return repo.save(watchlist.withItemIDs(updated));
+    }
+
+    public boolean deleteMovieFromWatchlist(String watchlistID, String movieID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+        Watchlist watchlist = getWatchlistById(watchlistID);
+
+        List<String> updatedItems = new ArrayList<>(watchlist.itemIDs());
+        updatedItems.remove(movieID);
+
+        repo.save(watchlist.withItemIDs(updatedItems));
+        return true;
+    }
 }
