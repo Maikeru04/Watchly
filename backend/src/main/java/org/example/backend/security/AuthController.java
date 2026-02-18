@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        request.logout(); // Spring Security löscht die Session
+        request.logout();
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }
