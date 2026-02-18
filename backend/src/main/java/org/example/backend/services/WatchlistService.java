@@ -77,7 +77,10 @@ public class WatchlistService {
     }
 
     public boolean deleteMovieFromWatchlist(String watchlistID, String movieID) {
-        Watchlist watchlist = repo.findById(watchlistID).orElseThrow(() -> new WatchlistNotFoundException(watchlistID));
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+        Watchlist watchlist = getWatchlistById(watchlistID);
 
         List<String> updatedItems = new ArrayList<>(watchlist.itemIDs());
         updatedItems.remove(movieID);
