@@ -16,7 +16,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // nur lokal DEV
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/auth/me").authenticated()
                         .requestMatchers("/api/watchlist/**").authenticated()
@@ -24,7 +24,7 @@ public class SecurityConfig {
                 )
                 .logout(l -> l
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("http://localhost:5173") // redirect nach React
+                        .logoutSuccessUrl("http://localhost:5173")
                 )
                 .oauth2Login(o -> o
                         .defaultSuccessUrl("http://localhost:5173", true)
