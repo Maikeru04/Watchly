@@ -13,6 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final String defaultUrl = "http://localhost:5173";
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -24,10 +26,10 @@ public class SecurityConfig {
                 )
                 .logout(l -> l
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("http://localhost:5173")
+                        .logoutSuccessUrl(defaultUrl)
                 )
                 .oauth2Login(o -> o
-                        .defaultSuccessUrl("http://localhost:5173", true)
+                        .defaultSuccessUrl(defaultUrl, true)
                 );
 
         return http.build();
@@ -39,7 +41,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        .allowedOrigins(defaultUrl)
                         .allowedMethods("*")
                         .allowCredentials(true);
             }

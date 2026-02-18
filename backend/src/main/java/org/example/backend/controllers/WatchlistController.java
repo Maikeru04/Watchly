@@ -1,9 +1,9 @@
 package org.example.backend.controllers;
 
+import org.springframework.web.bind.annotation.*;
 import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.models.Watchlist;
 import org.example.backend.services.WatchlistService;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
