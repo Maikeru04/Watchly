@@ -3,14 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 type NavbarProps = {
-    inputValue: string;
-    setInputValue: (v: string) => void;
-    onSearch: () => void;
+    setSearchQuery: (v: string) => void;
 };
 
-export default function Navbar({inputValue, setInputValue, onSearch}: NavbarProps) {
+export default function Navbar({ setSearchQuery }: NavbarProps) {
     const [user, setUser] = useState<{ name: string } | null>(null);
     const nav = useNavigate();
+    const [inputValue, setInputValue] = useState("");
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearchQuery(inputValue.trim());
+    };
 
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const [theme, setTheme] = useState<string>(
@@ -59,7 +63,7 @@ export default function Navbar({inputValue, setInputValue, onSearch}: NavbarProp
             </div>
 
             <div className="navbar-center">
-                <form onSubmit={(e) => {e.preventDefault(); onSearch();}}>
+                <form onSubmit={handleSubmit}>
                     <input
                         type="text"
                         value={inputValue}
