@@ -2,8 +2,6 @@ package org.example.backend.models;
 
 import lombok.Builder;
 
-import java.util.List;
-
 @Builder
-public record AppUser(String id, String username, List<String> watchlistIDs) {
+public record AppUser(String id, String username) {
 }
