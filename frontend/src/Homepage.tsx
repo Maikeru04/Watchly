@@ -16,7 +16,6 @@ export default function Homepage({ searchQuery }: HomepageProps) {
 
     const activeRequestRef = useRef(0);
 
-    // 🔥 Reagiert auf neue searchQuery
     useEffect(() => {
         if (!searchQuery) {
             setMovies([]);
