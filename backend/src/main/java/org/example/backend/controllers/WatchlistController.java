@@ -1,9 +1,9 @@
 package org.example.backend.controllers;
 
+import org.springframework.web.bind.annotation.*;
 import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.models.Watchlist;
 import org.example.backend.services.WatchlistService;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,5 +41,15 @@ public class WatchlistController {
     @DeleteMapping("/{id}")
     public boolean deleteWatchlist(@PathVariable String id) {
         return service.deleteWatchlistById(id);
+    }
+
+    @PostMapping("/{watchlistID}/movie/{movieID}")
+    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @PathVariable String movieID) {
+        return service.addMovieToWatchlist(watchlistID, movieID);
+    }
+
+    @DeleteMapping("/{watchlistID}/movie/{movieID}")
+    public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID) {
+        return service.deleteMovieFromWatchlist(watchlistID, movieID);
     }
 }

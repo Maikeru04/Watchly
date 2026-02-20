@@ -1,0 +1,301 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #111111;
+
+    --button-bg: #111111;
+    --button-text: #ffffff;
+    --button-hover: #333333;
+
+    --button-secondary-bg: #f3f3f3;
+    --button-secondary-text: #111111;
+    --button-secondary-hover: #e0e0e0;
+    --navbar-bg: #f5f5f5;
+
+    --input-bg: #f5f5f5;
+    --input-text: #111111;
+    --input-placeholder: #888888;
+    --input-border: #cccccc;
+    --input-focus: #111111;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+
+    --button-bg: #ffffff;
+    --button-text: #111111;
+    --button-hover: #dddddd;
+
+    --button-secondary-bg: #1e1e1e;
+    --button-secondary-text: #ffffff;
+    --button-secondary-hover: #2a2a2a;
+    --navbar-bg: #1e1e1e;
+
+    --input-bg: #1e1e1e;
+    --input-text: #ffffff;
+    --input-placeholder: #bbbbbb;
+    --input-border: #333333;
+    --input-focus: #ffffff;
+
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(20deg) scale(1.1);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: var(--navbar-bg);
+    transition: background-color 0.3s ease;
+    padding: 0 1rem;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+.btn:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid var(--button-secondary-hover);
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-text);
+}
+
+.btn-secondary:hover {
+    background-color: var(--button-secondary-hover);
+    transform: translateY(-2px);
+}
+.navbar-left,
+.navbar-center,
+.navbar-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-left {
+    justify-content: flex-start;
+}
+.navbar-right {
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.navbar-center {
+    justify-content: center;
+}
+
+.navbar-center form {
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.navbar-center input {
+    flex: 1;
+    padding: 0.55rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.25s ease;
+    min-width: 0;
+}
+
+.navbar-center input::placeholder {
+    color: var(--input-placeholder);
+}
+
+.navbar-center input:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
+}
+
+.navbar-center button {
+    padding: 0.55rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.navbar-center button:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.logo {
+    height: 100px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(-5px);
+    animation: logoFade 0.6s ease forwards;
+}
+
+@keyframes logoFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.movie-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2/3;
+    border-radius: 12px;
+    overflow: hidden;
+    color: white;
+    background-color: #222;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.movie-card:hover {
+    transform: scale(1.03);
+}
+
+.movie-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.movie-card:hover::after {
+    opacity: 1;
+}
+
+.movie-info {
+    position: absolute;
+    flex-direction: column;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.movie-card:hover .movie-info {
+    opacity: 1;
+}
+
+.movie-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.movie-info button {
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    border: none;
+    background-color: white;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+
+.movie-info button:hover {
+    background-color: #dddddd;
+    transform: translateY(-2px);
+}
+
+.btn-loadmore {
+    display: block;
+    margin: 1rem auto;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+}
+
+.loadmore-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.btn-loadmore:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}

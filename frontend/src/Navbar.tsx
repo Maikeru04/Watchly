@@ -1,67 +1,86 @@
-import { useState } from "react";
-import { movieService } from "./api/MovieService.ts";
-import type { Movie } from "./types/Movie.ts";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 type NavbarProps = {
-    setMovies: (movies: Movie[]) => void;
-    setLoading: (loading: boolean) => void;
+    theme: string;
+    toggleTheme: () => void;
+    inputValue: string;
+    setInputValue: (v: string) => void;
+    onSearch: () => void;
 };
 
-export default function Navbar({ setMovies, setLoading }: NavbarProps) {
-    const [inputValue, setInputValue] = useState("");
-    const nav = useNavigate()
+export default function Navbar({theme, toggleTheme, inputValue, setInputValue, onSearch}: NavbarProps) {
+    const [user, setUser] = useState<{ name: string } | null>(null);
+    const nav = useNavigate();
+
+    const host =
+        window.location.host === "localhost:5173"
+            ? "http://localhost:8080"
+            : window.location.origin;
 
     function login() {
-        const host =
-            window.location.host === "localhost:5173"
-                ? "http://localhost:8080"
-                : window.location.origin;
-        window.open(host + "/oauth2/authorization/github", "_self");
+        window.location.href = host + "/oauth2/authorization/github";
     }
 
     function logout() {
-        const host =
-            window.location.host === "localhost:5173"
-                ? "http://localhost:8080"
-                : window.location.origin;
-        window.open(host + "/logout", "_self");
+        window.location.href = host + "/logout";
     }
 
-    const handleSubmit = async () => {
-        setLoading(true);
-        const results = await movieService(inputValue);
-        setMovies(results);
-        setLoading(false);
-    };
-
-    function navWatchlist() {
-        nav("/watchlist")
-    }
-    function navHome() {
-        nav("/")
-    }
+    useEffect(() => {
+        axios
+            .get(host + "/api/auth/me", { withCredentials: true })
+            .then(res => setUser(res.data))
+            .catch(() => setUser(null));
+    }, []);
 
     return (
-        <div>
-            <form
-                onSubmit={(e) => {
-                    e.preventDefault();
-                    handleSubmit();
-                }}
-            >
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Filmtitel eingeben..."
-                />
-                <button type="submit">Suchen</button>
-            </form>
-            <button onClick={navWatchlist}>Watchlist</button>
-            <button onClick={navHome}>Home</button>
-            <button onClick={login}>Login</button>
-            <button onClick={logout}>Logout</button>
+        <div className="navbar">
+            <div className="navbar-left">
+                <Link to="/">
+                    {theme === "light" ? (
+                        <img className="logo" src="/Watchly_white_1.png" alt="Watchly Logo" />
+                    ) : (
+                        <img className="logo" src="/Watchly_black_1.png" alt="Watchly Logo" />
+                    )}
+                </Link>
+            </div>
+
+            <div className="navbar-center">
+                <form onSubmit={(e) => {e.preventDefault(); onSearch();}}>
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Filmtitel eingeben..."
+                    />
+                    <button type="submit">Suchen</button>
+                </form>
+            </div>
+
+            <div className="navbar-right">
+                <button onClick={toggleTheme} className="theme-toggle">
+                    {theme === "light" ? "🌙" : "☀️"}
+                </button>
+
+                {user && (
+                    <button className="btn" onClick={() => nav("/watchlist")}>
+                        Watchlist
+                    </button>
+                )}
+
+                {!user && (
+                    <button className="btn-secondary" onClick={login}>
+                        Login with Github
+                    </button>
+                )}
+
+                {user && (
+                    <button className="btn-secondary" onClick={logout}>
+                        Logout
+                    </button>
+                )}
+            </div>
         </div>
     );
 }
