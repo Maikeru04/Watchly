@@ -17,31 +17,16 @@ function App() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [inputValue, setInputValue] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     const activeRequestRef = useRef(0);
-    const searchQueryRef = useRef("");
-
-
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const [theme, setTheme] = useState<string>(
-        localStorage.getItem("theme") || (prefersDark ? "dark" : "light")
-    );
-
-    useEffect(() => {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
-    }, [theme]);
-
-    const toggleTheme = () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
-    };
 
     const handleSearch = async () => {
         const trimmed = inputValue.trim();
         setMovies([]);
         setCurrentPage(1);
         setTotalPages(1);
-        searchQueryRef.current = trimmed;
+        setSearchQuery(trimmed);
         if (!trimmed) {
             return;
         }
@@ -69,7 +54,7 @@ function App() {
     }, []);
 
     const loadMore = async () => {
-        const query = searchQueryRef.current;
+        const query = searchQuery;
         if (!query) return;
         if (currentPage >= totalPages) return;
 
@@ -86,8 +71,6 @@ function App() {
     return (
         <>
             <Navbar
-                theme={theme}
-                toggleTheme={toggleTheme}
                 inputValue={inputValue}
                 setInputValue={setInputValue}
                 onSearch={handleSearch}

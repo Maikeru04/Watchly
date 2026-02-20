@@ -3,16 +3,28 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 type NavbarProps = {
-    theme: string;
-    toggleTheme: () => void;
     inputValue: string;
     setInputValue: (v: string) => void;
     onSearch: () => void;
 };
 
-export default function Navbar({theme, toggleTheme, inputValue, setInputValue, onSearch}: NavbarProps) {
+export default function Navbar({inputValue, setInputValue, onSearch}: NavbarProps) {
     const [user, setUser] = useState<{ name: string } | null>(null);
     const nav = useNavigate();
+
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const [theme, setTheme] = useState<string>(
+        localStorage.getItem("theme") || (prefersDark ? "dark" : "light")
+    );
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => (prev === "light" ? "dark" : "light"));
+    };
 
     const host =
         window.location.host === "localhost:5173"
