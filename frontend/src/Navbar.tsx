@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import CreateWatchlistModal from "./components/CreateWatchlistModal.tsx";
 
 type NavbarProps = {
     setSearchQuery: (v: string) => void;
@@ -10,6 +11,7 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
     const [user, setUser] = useState<{ name: string } | null>(null);
     const nav = useNavigate();
     const [inputValue, setInputValue] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -80,6 +82,18 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                 </button>
 
                 {user && (
+                    <button className="btn-secondary" onClick={() => setModalOpen(true)}>➕</button>
+                )}
+
+                <CreateWatchlistModal
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    onCreated={() => {
+                        window.location.reload()
+                    }}
+                />
+
+                {user && (
                     <button className="btn" onClick={() => nav("/watchlist")}>
                         Watchlist
                     </button>
@@ -96,6 +110,7 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                         Logout
                     </button>
                 )}
+
             </div>
         </div>
     );
