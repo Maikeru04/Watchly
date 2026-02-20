@@ -31,7 +31,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         AppUser newUser = AppUser.builder()
                 .id(oAuth2User.getName())
                 .username(oAuth2User.getAttribute("login"))
-                .watchlistIDs(new ArrayList<>())
                 .build();
         repo.save(newUser);
         return newUser;
