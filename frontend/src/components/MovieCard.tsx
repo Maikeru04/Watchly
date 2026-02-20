@@ -7,14 +7,14 @@ type MovieCardProps = {
 
 export default function MovieCard({movie}:MovieCardProps) {
     function addToWatchlist() {
-        axios.post(`/api/watchlist/ee5647e1-1f2a-4a09-a1c6-d65f2d6d455e/movie/${movie.id}`)
+        axios.post(`/api/watchlist/c7d9e2f4-9a11-4b55-92aa-3b0f87654321/movie/${movie.id}`)
     }
     return(
         <div className="movie-card"
             style={{
                 backgroundImage: movie.poster_path
                     ? `url(https://image.tmdb.org/t/p/w500${movie.poster_path})`
-                    : undefined
+                    : `url(/image_not_found.jpg)`
             }}
         >
             <div className="movie-info">
