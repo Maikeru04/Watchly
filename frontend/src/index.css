@@ -40,6 +40,7 @@
 }
 
 body {
+    min-height: 100vh;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -63,6 +64,7 @@ body {
     align-items: center;
     position: sticky;
     top: 0;
+    z-index: 1000;
     background-color: var(--navbar-bg);
     transition: background-color 0.3s ease;
     padding: 0 1rem;
@@ -219,7 +221,7 @@ body {
 }
 
 .movie-card:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
 .movie-card::after {
@@ -251,11 +253,6 @@ body {
 
 .movie-card:hover .movie-info {
     opacity: 1;
-}
-
-.movie-card > * {
-    position: relative;
-    z-index: 1;
 }
 
 .movie-info button {
@@ -383,7 +380,6 @@ body {
 }
 
 .watchlist-card {
-    width: 100%;
     border-radius: 12px;
     overflow: hidden;
     color: var(--button-bg);
@@ -397,9 +393,9 @@ body {
 
 .watchlist-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(700px, 1fr));
+    grid-template-columns: repeat(2, minmax(600px, 1fr));
     gap: 2rem;
-    width: 100%;
+    margin: 55px;
     padding: 1rem 0;
 }
 
