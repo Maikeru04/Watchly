@@ -65,7 +65,7 @@ export default function Homepage({ searchQuery }: HomepageProps) {
                 ))}
             </div>
 
-            {currentPage < totalPages && (
+            {currentPage < totalPages && searchQuery && (
                 <div className="loadmore-container">
                     <button className="btn-loadmore" onClick={loadMore}>
                         Load More results
