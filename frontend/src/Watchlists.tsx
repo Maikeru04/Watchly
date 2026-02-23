@@ -15,9 +15,6 @@ export default function Watchlists() {
 
     return(
         <>
-            <h1>Watchlists</h1>
-
-
             <div className={"watchlist-grid"}>
                 {watchlists.map((watchlist) => (
                     <WatchlistCard key={watchlist.id} watchlist={watchlist} />

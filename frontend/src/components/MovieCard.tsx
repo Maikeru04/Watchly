@@ -7,7 +7,7 @@ type MovieCardProps = {
 
 export default function MovieCard({movie}:MovieCardProps) {
     function addToWatchlist() {
-        axios.post(`/api/watchlist/c7d9e2f4-9a11-4b55-92aa-3b0f87654321/movie/${movie.id}`)
+        axios.post(`/api/watchlist/b3f1a6c2-1e4b-4a9d-8c21-7f0e12345678/movie/${movie.id}`)
     }
     return(
         <div className="movie-card"

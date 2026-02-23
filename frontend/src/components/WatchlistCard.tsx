@@ -49,7 +49,6 @@ export default function WatchlistCard({ watchlist }: WatchlistCardProps) {
                     <p>{watchlist.description}</p>
                 </div>
 
-                <h2>Movies:</h2>
                 {movies.map((movie) => (
                     <MovieWatchlistCard key={movie.id} movie={movie} />
                 ))}
