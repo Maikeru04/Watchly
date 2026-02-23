@@ -1,15 +1,22 @@
 import type {Movie} from "../types/Movie.ts";
-import axios from "axios";
+import {useState} from "react";
+import CreateAddToWatchlistModal from "./CreateAddToWatchlistModal.tsx";
+import {useNavigate} from "react-router-dom";
 
 type MovieCardProps = {
     movie: Movie
 }
 
 export default function MovieCard({movie}:MovieCardProps) {
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const nav = useNavigate();
+
     function addToWatchlist() {
-        axios.post(`/api/watchlist/b3f1a6c2-1e4b-4a9d-8c21-7f0e12345678/movie/${movie.id}`)
+        setModalOpen(true);
     }
     return(
+        <>
         <div className="movie-card"
             style={{
                 backgroundImage: movie.poster_path
@@ -26,5 +33,15 @@ export default function MovieCard({movie}:MovieCardProps) {
                 <button onClick={addToWatchlist}>Add to Watchlist</button>
             </div>
         </div>
+
+            {modalOpen && <CreateAddToWatchlistModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onCreated={() => {
+                    nav("/")
+                }}
+                movie={movie}
+            />}
+        </>
     )
 }
