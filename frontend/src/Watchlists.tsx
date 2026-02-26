@@ -7,17 +7,21 @@ export default function Watchlists() {
 
     const [watchlists, setWatchlists] = useState<Watchlist[]>([]);
 
-    useEffect(() => {
+    const loadWatchlists = () => {
         axios.get("/api/watchlist/user", { withCredentials: true })
             .then(res => setWatchlists(res.data))
             .catch(err => console.error(err));
+    };
+
+    useEffect(() => {
+        loadWatchlists();
     }, []);
 
     return(
         <>
             <div className={"watchlist-grid"}>
                 {watchlists.map((watchlist) => (
-                    <WatchlistCard key={watchlist.id} watchlist={watchlist} />
+                    <WatchlistCard key={watchlist.id} watchlist={watchlist} onUpdate={loadWatchlists}/>
                 ))}
             </div>
         </>
