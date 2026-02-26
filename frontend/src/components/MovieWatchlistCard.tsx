@@ -3,14 +3,22 @@ import axios from "axios";
 
 type MovieWatchlistCardProps = {
     movie: Movie
+    watchlistID:string
 }
 
-export default function MovieWatchlistCard({movie}:MovieWatchlistCardProps) {
+export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCardProps) {
     function removeFromWatchlist() {
-        axios.delete(`/api/watchlist/c7d9e2f4-9a11-4b55-92aa-3b0f87654321/movie/${movie.id}`)
+        axios.delete(`/api/watchlist/${watchlistID}/movie/${movie.id}`)
+        window.location.reload()
     }
+
     return(
-        <div className="watchlist-card-movies">
+        <div className="watchlist-card-movies"
+             draggable
+             onDragStart={(e) => {
+                 e.dataTransfer.setData("movieId", `${movie.id}`);
+                 e.dataTransfer.setData("fromWatchlist", watchlistID);
+             }}>
             <div className="watchlist-card-content">
 
                 <div className="watchlist-card-info">
@@ -28,7 +36,6 @@ export default function MovieWatchlistCard({movie}:MovieWatchlistCardProps) {
                 </div>
             </div>
                 <div className={"watchlist-card-buttons"}>
-                    <button className="btn" onClick={removeFromWatchlist}>Move to other Watchlist</button>
                     <button className="btn" onClick={removeFromWatchlist}>Remove from Watchlist</button>
                 </div>
         </div>
