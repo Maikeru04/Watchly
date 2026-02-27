@@ -1,7 +1,6 @@
 import type {Movie} from "../types/Movie.ts";
 import {useState} from "react";
 import CreateAddToWatchlistModal from "./CreateAddToWatchlistModal.tsx";
-import {useNavigate} from "react-router-dom";
 import type {Series} from "../types/Series.ts";
 
 type MovieCardProps = {
@@ -11,7 +10,6 @@ type MovieCardProps = {
 export default function MovieCard({movie}:MovieCardProps) {
 
     const [modalOpen, setModalOpen] = useState(false);
-    const nav = useNavigate();
 
     const isMovie = movie.media_type === "movie";
 
@@ -45,7 +43,7 @@ export default function MovieCard({movie}:MovieCardProps) {
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onCreated={() => {
-                    nav("/")
+
                 }}
                 movie={movie}
             />}
