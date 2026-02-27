@@ -2,6 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.exceptions.WatchlistNotFoundException;
+import org.example.backend.models.Item;
 import org.example.backend.models.Watchlist;
 import org.example.backend.repositories.WatchlistRepository;
 import org.springframework.stereotype.Service;
@@ -72,25 +73,28 @@ public class WatchlistService {
 
     // MOVIE SECTION
 
-    public Watchlist addMovieToWatchlist(String watchlistID, String movieID, String userID) {
-        Watchlist watchlist = repo.findById(watchlistID).orElseThrow(() -> new WatchlistNotFoundException(watchlistID));
-
-        List<String> updated = new ArrayList<>(watchlist.itemIDs());
-        updated.add(movieID);
-
-        return repo.save(watchlist.withItemIDs(updated));
-    }
-
-    public boolean deleteMovieFromWatchlist(String watchlistID, String movieID, String userID) {
+    public Watchlist addMovieToWatchlist(String watchlistID, Item movieID, String userID) {
         if(!repo.existsById(watchlistID)) {
             throw new WatchlistNotFoundException(watchlistID);
         }
         Watchlist watchlist = getWatchlistById(watchlistID, userID);
 
-        List<String> updatedItems = new ArrayList<>(watchlist.itemIDs());
+        List<Item> updated = new ArrayList<>(watchlist.items());
+        updated.add(movieID);
+
+        return repo.save(watchlist.withItems(updated));
+    }
+
+    public boolean deleteMovieFromWatchlist(String watchlistID, Item movieID, String userID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
+
+        List<Item> updatedItems = new ArrayList<>(watchlist.items());
         updatedItems.remove(movieID);
 
-        repo.save(watchlist.withItemIDs(updatedItems));
+        repo.save(watchlist.withItems(updatedItems));
         return true;
     }
 }
