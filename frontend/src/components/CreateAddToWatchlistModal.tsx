@@ -20,14 +20,11 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
     const [watchlists, setWatchlists] = useState<Watchlist[]>([])
     const [user, setUser] = useState<{ name: string } | null>(null);
 
-    if(!user) {
-
-    }
+    const isMovie = movie.media_type === "movie";
 
     const options:string[] = watchlists.map((watchlist) => (
         watchlist.name
     ))
-
 
     const host =
         window.location.host === "localhost:5173"
@@ -51,15 +48,16 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
             return;
         }
 
-        if(watchlistToUpdate.itemIDs.includes(`${movie.id}`)) {
+        if(watchlistToUpdate.items.some(item => item.itemID === `${movie.id}`)) {
             setError("Dieser Film ist bereits in der ausgewählten Watchlist.")
             return;
         }
 
+        const media_type = isMovie ? "movie" : "series";
         try {
-            await axios.post(`/api/watchlist/${watchlistToUpdate?.id}/movie/${movie.id}`,
-                {
-
+            await axios.post(`/api/watchlist/${watchlistToUpdate?.id}/movie`, {
+                    "itemID": `${movie.id}`,
+                    "media_type": `${media_type}`
                 },
                 { withCredentials: true }
             );
@@ -87,7 +85,7 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
             .get(host + "/api/auth/me", { withCredentials: true })
             .then(res => setUser(res.data))
             .catch(() => setUser(null));
-    }, []);
+    }, [host]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
@@ -123,7 +121,7 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
                         placeholder="Bitte Watchlist wählen!"
                     />
 
-                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    {error && <p style={{ color: "white" }}>{error}</p>}
 
                     <div className={"modal-bottom"}>
                         <button className={"btn-secondary"} onClick={onClose} disabled={loading}>

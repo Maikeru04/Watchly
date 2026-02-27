@@ -19,9 +19,15 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
         async function fetchMovies() {
             try {
                 const responses = await Promise.all(
-                    watchlist.itemIDs.map(async (id) => {
+                    watchlist.items.map(async (item) => {
+
+                        const endpoint =
+                            item.media_type === "movie"
+                                ? `/movie/${item.itemID}`
+                                : `/tv/${item.itemID}`;
+
                         const res = await fetch(
-                            `${import.meta.env.VITE_API_URL}/movie/${id}`,
+                            `${import.meta.env.VITE_API_URL}/${endpoint}`,
                             {
                                 headers: {
                                     Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
@@ -32,7 +38,10 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
                     })
                 );
 
-                setMovies(responses);
+                setMovies(responses.map((movie, index) => ({
+                    ...movie,
+                    media_type: watchlist.items[index].media_type
+                })));
             } catch (error) {
                 console.error("Failed to fetch movies:", error);
             } finally {
@@ -41,18 +50,27 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
         }
 
         fetchMovies();
-    }, [watchlist.itemIDs]);
+    }, [watchlist.items]);
 
     async function handleDrop(e: React.DragEvent, targetWatchlistId: string) {
         const movieId = e.dataTransfer.getData("movieId");
         const fromWatchlist = e.dataTransfer.getData("fromWatchlist");
+        const mediaType = e.dataTransfer.getData("media_type");
 
         if (!movieId || !fromWatchlist || fromWatchlist === targetWatchlistId) return;
 
         try {
-            await axios.delete(`/api/watchlist/${fromWatchlist}/movie/${movieId}`);
+            await axios.delete(`/api/watchlist/${fromWatchlist}/movie`, {
+                data: {
+                    itemID: movieId,
+                    media_type: mediaType
+                }
+            });
 
-            await axios.post(`/api/watchlist/${targetWatchlistId}/movie/${movieId}`);
+            await axios.post(`/api/watchlist/${targetWatchlistId}/movie`, {
+                itemID: movieId,
+                media_type: mediaType
+            }, { withCredentials: true });
 
             onUpdate()
 
