@@ -2,15 +2,21 @@ import type {Movie} from "../types/Movie.ts";
 import {useState} from "react";
 import CreateAddToWatchlistModal from "./CreateAddToWatchlistModal.tsx";
 import {useNavigate} from "react-router-dom";
+import type {Series} from "../types/Series.ts";
 
 type MovieCardProps = {
-    movie: Movie
+    movie: Movie | Series
 }
 
 export default function MovieCard({movie}:MovieCardProps) {
 
     const [modalOpen, setModalOpen] = useState(false);
     const nav = useNavigate();
+
+    const isMovie = movie.media_type === "movie";
+
+    const title = isMovie ? movie.title : movie.name;
+    const date = isMovie ? movie.release_date : movie.first_air_date;
 
     function addToWatchlist() {
         setModalOpen(true);
@@ -25,9 +31,10 @@ export default function MovieCard({movie}:MovieCardProps) {
             }}
         >
             <div className="movie-info">
-                <h3>{movie.title}</h3>
+                <h3>{isMovie ? "🎬" : "📺"} {title}</h3>
                 <p>
-                    Release: {movie.release_date ? `${movie.release_date.split("-")[2]}.${movie.release_date.split("-")[1]}.${movie.release_date.split("-")[0]}` : ""}
+                    {isMovie ? "Release:" : "First Air:"}{" "}
+                    {date ? `${date.split("-")[2]}.${date.split("-")[1]}.${date.split("-")[0]}` : ""}
                 </p>
                 <p>Rating: {Math.round(movie.vote_average * 10) / 10} / 10⭐</p>
                 <button onClick={addToWatchlist}>Add to Watchlist</button>

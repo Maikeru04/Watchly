@@ -1,15 +1,15 @@
 import CustomDropdown from "./CustomDropdown.tsx";
 import axios from "axios";
 import {useEffect, useState} from "react";
-import MovieCard from "./MovieCard.tsx";
 import type {Movie} from "../types/Movie.ts";
 import type {Watchlist} from "../types/Watchlist.ts";
+import type {Series} from "../types/Series.ts";
 
 type CreateAddToWatchlistModal = {
     isOpen: boolean;
     onClose: () => void;
     onCreated?: () => void;
-    movie:Movie;
+    movie:Movie | Series;
 };
 
 export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, movie}:CreateAddToWatchlistModal) {
