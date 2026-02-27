@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import MovieCard from "./components/MovieCard.tsx";
 import type { Movie } from "./types/Movie.ts";
 import { movieService } from "./api/MovieService.ts";
+import type {Series} from "./types/Series.ts";
 
 type HomepageProps = {
     searchQuery: string;
@@ -9,7 +10,7 @@ type HomepageProps = {
 
 export default function Homepage({ searchQuery }: HomepageProps) {
 
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const [movies, setMovies] = useState<(Movie | Series)[]>([]);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -18,6 +19,7 @@ export default function Homepage({ searchQuery }: HomepageProps) {
 
     useEffect(() => {
         if (!searchQuery) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setMovies([]);
             return;
         }
