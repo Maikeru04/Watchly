@@ -5,6 +5,7 @@ import Watchlists from "./Watchlists.tsx";
 import ProtectedRoute from "./ProtectedRoute.tsx";
 import Navbar from "./Navbar.tsx";
 import axios from "axios";
+import Landingpage from "./Landingpage.tsx";
 
 function App() {
     const [user, setUser] = useState<string | undefined | null>(undefined);
@@ -22,10 +23,14 @@ function App() {
             <Navbar setSearchQuery={setSearchQuery} />
 
             <Routes>
-                <Route path="/" element={
+
+                <Route path="/search" element={
                     <Homepage searchQuery={searchQuery} />
                 }/>
 
+                <Route path="/" element={
+                    <Landingpage/>
+                }/>
                 <Route element={<ProtectedRoute user={user} />}>
                     <Route path="/watchlist" element={<Watchlists />} />
                 </Route>
