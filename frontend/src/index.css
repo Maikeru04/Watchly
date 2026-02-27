@@ -203,7 +203,7 @@ body {
 
 .movie-card {
     position: relative;
-    width: 100%;
+    width: 221px;
     aspect-ratio: 2/3;
     border-radius: 12px;
     overflow: hidden;
@@ -534,4 +534,38 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.media-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    padding: 10px;
+}
+
+.media-row > * {
+    flex: 0 0 auto;
+}
+
+.media-row::-webkit-scrollbar {
+    height: 8px;
+}
+
+.media-row::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.media-row::-webkit-scrollbar-thumb {
+    background: var(--button-bg);
+    border-radius: 4px;
+}
+
+.landing-row {
+    background: var(--navbar-bg);
+    border-radius: 10px;
+    padding-left: 10px;
+    font-family: "Arial", serif;
 }
