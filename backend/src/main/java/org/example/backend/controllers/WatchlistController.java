@@ -1,5 +1,7 @@
 package org.example.backend.controllers;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.models.Watchlist;
@@ -18,19 +20,19 @@ public class WatchlistController {
         this.service = service;
     }
 
-    @GetMapping
-    public List<Watchlist> getAllWatchlists() {
-        return service.getAllWatchlists();
+    @GetMapping("/user")
+    public List<Watchlist> getAllWatchlistsByUser(@AuthenticationPrincipal OAuth2User user) {
+        return service.getWatchlistsByUser(user.getName());
     }
 
     @GetMapping("/{id}")
-    public Watchlist getWatchlistById(@PathVariable String id) {
-        return service.getWatchlistById(id);
+    public Watchlist getWatchlistById(@PathVariable String id, @AuthenticationPrincipal OAuth2User user) {
+        return service.getWatchlistById(id, user.getName());
     }
 
     @PostMapping
-    public Watchlist createWatchlist(@RequestBody WatchlistInDto watchlist) {
-        return service.createWatchlist(watchlist);
+    public Watchlist createWatchlist(@RequestBody WatchlistInDto watchlist, @AuthenticationPrincipal OAuth2User user) {
+        return service.createWatchlist(watchlist, user.getName());
     }
 
     @PutMapping("/{id}")
@@ -44,12 +46,12 @@ public class WatchlistController {
     }
 
     @PostMapping("/{watchlistID}/movie/{movieID}")
-    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @PathVariable String movieID) {
-        return service.addMovieToWatchlist(watchlistID, movieID);
+    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @PathVariable String movieID, @AuthenticationPrincipal OAuth2User user) {
+        return service.addMovieToWatchlist(watchlistID, movieID, user.getName());
     }
 
     @DeleteMapping("/{watchlistID}/movie/{movieID}")
-    public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID) {
-        return service.deleteMovieFromWatchlist(watchlistID, movieID);
+    public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID, @AuthenticationPrincipal OAuth2User user) {
+        return service.deleteMovieFromWatchlist(watchlistID, movieID, user.getName());
     }
 }

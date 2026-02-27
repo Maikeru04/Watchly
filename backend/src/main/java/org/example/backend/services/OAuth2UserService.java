@@ -8,8 +8,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 @Service
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
@@ -31,7 +29,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         AppUser newUser = AppUser.builder()
                 .id(oAuth2User.getName())
                 .username(oAuth2User.getAttribute("login"))
-                .watchlistIDs(new ArrayList<>())
                 .build();
         repo.save(newUser);
         return newUser;

@@ -22,18 +22,23 @@ public class WatchlistService {
         return UUID.randomUUID().toString();
     }
 
-    public List<Watchlist> getAllWatchlists() {
-        return repo.findAll();
+    public Watchlist getWatchlistById(String id, String userId) {
+        Watchlist watchlist = repo.findById(id)
+                .orElseThrow(() -> new WatchlistNotFoundException(id));
+
+        if (!watchlist.userId().equals(userId)) {
+            throw new RuntimeException("Forbidden");
+        }
+
+        return watchlist;
     }
 
-
-    public Watchlist getWatchlistById(String id) {
-        return repo.findById(id).orElseThrow(() -> new WatchlistNotFoundException(id));
+    public List<Watchlist> getWatchlistsByUser(String userId) {
+        return repo.findByUserId(userId);
     }
 
-
-    public Watchlist createWatchlist(WatchlistInDto watchlistDto) {
-        Watchlist watchlist = new Watchlist(generateUUID(), watchlistDto.name(), watchlistDto.description(), new ArrayList<>(), watchlistDto.type());
+    public Watchlist createWatchlist(WatchlistInDto watchlistDto, String userId) {
+        Watchlist watchlist = new Watchlist(generateUUID(), userId, watchlistDto.name(), watchlistDto.description(), new ArrayList<>(), watchlistDto.type());
         return repo.save(watchlist);
     }
 
@@ -67,7 +72,7 @@ public class WatchlistService {
 
     // MOVIE SECTION
 
-    public Watchlist addMovieToWatchlist(String watchlistID, String movieID) {
+    public Watchlist addMovieToWatchlist(String watchlistID, String movieID, String userID) {
         Watchlist watchlist = repo.findById(watchlistID).orElseThrow(() -> new WatchlistNotFoundException(watchlistID));
 
         List<String> updated = new ArrayList<>(watchlist.itemIDs());
@@ -76,11 +81,11 @@ public class WatchlistService {
         return repo.save(watchlist.withItemIDs(updated));
     }
 
-    public boolean deleteMovieFromWatchlist(String watchlistID, String movieID) {
+    public boolean deleteMovieFromWatchlist(String watchlistID, String movieID, String userID) {
         if(!repo.existsById(watchlistID)) {
             throw new WatchlistNotFoundException(watchlistID);
         }
-        Watchlist watchlist = getWatchlistById(watchlistID);
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
 
         List<String> updatedItems = new ArrayList<>(watchlist.itemIDs());
         updatedItems.remove(movieID);

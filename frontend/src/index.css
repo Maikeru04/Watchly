@@ -40,6 +40,7 @@
 }
 
 body {
+    min-height: 100vh;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -63,6 +64,7 @@ body {
     align-items: center;
     position: sticky;
     top: 0;
+    z-index: 1000;
     background-color: var(--navbar-bg);
     transition: background-color 0.3s ease;
     padding: 0 1rem;
@@ -201,7 +203,7 @@ body {
 
 .movie-card {
     position: relative;
-    width: 100%;
+    width: 221px;
     aspect-ratio: 2/3;
     border-radius: 12px;
     overflow: hidden;
@@ -219,7 +221,7 @@ body {
 }
 
 .movie-card:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
 .movie-card::after {
@@ -251,11 +253,6 @@ body {
 
 .movie-card:hover .movie-info {
     opacity: 1;
-}
-
-.movie-card > * {
-    position: relative;
-    z-index: 1;
 }
 
 .movie-info button {
@@ -298,4 +295,277 @@ body {
 .btn-loadmore:hover {
     background-color: var(--button-hover);
     transform: translateY(-2px);
+}
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal {
+    position: relative;
+    padding: 2rem;
+    border-radius: 10px;
+    background: var(--navbar-bg);
+    width: 400px;
+    z-index: 10000;
+}
+
+.modal-addwatchlist {
+    position: relative;
+    padding: 2rem;
+    border-radius: 10px;
+    height: 600px;
+    width: 400px;
+    z-index: 10000;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.model-items {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: var(--navbar-bg);
+    border: 1px solid gray;
+    border-radius: 12px;
+    color: var(--button-bg);
+    box-sizing: border-box;
+}
+
+.modal-addwatchlist::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.75) 0%,
+            rgba(0, 0, 0, 0.55) 30%,
+            rgba(0, 0, 0, 0.25) 60%,
+            rgba(0, 0, 0, 0.05) 85%,
+            rgba(0, 0, 0, 0) 100%
+    );
+    z-index: 0;
+}
+
+.modal-addwatchlist > * {
+    position: relative;
+    z-index: 1;
+}
+
+.modal-bottom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: auto;
+}
+
+.modal-footer-group {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.modal-dropdown {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.modal-dropdown ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--navbar-bg);
+    border-radius: 12px;
+    padding: 0.25rem 0;
+    margin: 0;
+    list-style: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.modal-dropdown li {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.modal-dropdown li:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-dropdown button {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid gray;
+    background: var(--navbar-bg);
+    text-align: left;
+    cursor: pointer;
+    color: var(--button-bg);
+    box-sizing: border-box;
+}
+
+.modal-dropdown-placeholder {
+    color: var(--bg-color);
+}
+
+.watchlist-card {
+    border-radius: 12px;
+    overflow: hidden;
+    color: var(--button-bg);
+    background-color: var(--navbar-bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: background-color 0.2s ease;
+}
+
+.watchlist-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(600px, 1fr));
+    gap: 2rem;
+    margin: 55px;
+    padding: 1rem 0;
+}
+
+.watchlist-card-movies {
+    border-radius: 12px;
+    border: 1px solid var(--button-secondary-hover);
+    margin: 2px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 100%;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    cursor: grab;
+}
+
+.watchlist-card-movies:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.watchlist-card-movies:active {
+    opacity: 0.6;
+    transform: scale(0.98);
+    cursor: grabbing;
+}
+
+.watchlist-card.drag-over {
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.watchlist-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.watchlist-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.watchlist-card-info h3 {
+    margin: 0;
+}
+
+.watchlist-card-info p {
+    margin: 0;
+}
+
+.watchlist-card-poster img {
+    border-radius: 8px;
+    width: 125px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.watchlist-card-movies .btn {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--button-secondary-text);
+    color: var(--button-secondary-bg);
+    cursor: pointer;
+}
+
+.watchlist-card-top {
+    display: flex;
+    flex-direction: column;
+}
+
+.watchlist-card-bottom {
+    bottom: 0;
+    right: 10px;
+}
+
+.watchlist-card-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.modal-login {
+    position: relative;
+    background: var(--navbar-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    width: 300px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.media-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    padding: 10px;
+}
+
+.media-row > * {
+    flex: 0 0 auto;
+}
+
+.media-row::-webkit-scrollbar {
+    height: 8px;
+}
+
+.media-row::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.media-row::-webkit-scrollbar-thumb {
+    background: var(--button-bg);
+    border-radius: 4px;
+}
+
+.landing-row {
+    background: var(--navbar-bg);
+    border-radius: 10px;
+    padding-left: 10px;
+    font-family: "Arial", serif;
 }

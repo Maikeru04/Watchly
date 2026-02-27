@@ -1,18 +1,37 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import CreateWatchlistModal from "./components/CreateWatchlistModal.tsx";
 
 type NavbarProps = {
-    theme: string;
-    toggleTheme: () => void;
-    inputValue: string;
-    setInputValue: (v: string) => void;
-    onSearch: () => void;
+    setSearchQuery: (v: string) => void;
 };
 
-export default function Navbar({theme, toggleTheme, inputValue, setInputValue, onSearch}: NavbarProps) {
+export default function Navbar({ setSearchQuery }: NavbarProps) {
     const [user, setUser] = useState<{ name: string } | null>(null);
     const nav = useNavigate();
+    const [inputValue, setInputValue] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setSearchQuery(inputValue.trim());
+        nav("/search")
+    };
+
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const [theme, setTheme] = useState<string>(
+        localStorage.getItem("theme") || (prefersDark ? "dark" : "light")
+    );
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => (prev === "light" ? "dark" : "light"));
+    };
 
     const host =
         window.location.host === "localhost:5173"
@@ -47,7 +66,7 @@ export default function Navbar({theme, toggleTheme, inputValue, setInputValue, o
             </div>
 
             <div className="navbar-center">
-                <form onSubmit={(e) => {e.preventDefault(); onSearch();}}>
+                <form onSubmit={handleSubmit}>
                     <input
                         type="text"
                         value={inputValue}
@@ -62,6 +81,18 @@ export default function Navbar({theme, toggleTheme, inputValue, setInputValue, o
                 <button onClick={toggleTheme} className="theme-toggle">
                     {theme === "light" ? "🌙" : "☀️"}
                 </button>
+
+                {user && (
+                    <button className="btn-secondary" onClick={() => setModalOpen(true)}>➕</button>
+                )}
+
+                <CreateWatchlistModal
+                    isOpen={modalOpen}
+                    onClose={() => setModalOpen(false)}
+                    onCreated={() => {
+                        window.location.reload()
+                    }}
+                />
 
                 {user && (
                     <button className="btn" onClick={() => nav("/watchlist")}>
@@ -80,6 +111,7 @@ export default function Navbar({theme, toggleTheme, inputValue, setInputValue, o
                         Logout
                     </button>
                 )}
+
             </div>
         </div>
     );
