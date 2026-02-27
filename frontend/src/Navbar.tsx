@@ -16,7 +16,7 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setSearchQuery(inputValue.trim());
-        nav("/")
+        nav("/search")
     };
 
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
