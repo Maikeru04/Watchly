@@ -71,9 +71,9 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Filmtitel eingeben..."
+                        placeholder="Enter movie title..."
                     />
-                    <button type="submit">Suchen</button>
+                    <button type="submit">Search</button>
                 </form>
             </div>
 
@@ -90,7 +90,11 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                     isOpen={modalOpen}
                     onClose={() => setModalOpen(false)}
                     onCreated={() => {
-                        window.location.reload()
+                        if(window.location.pathname === "/watchlist") {
+                            window.location.reload()
+                        } else {
+                            nav("/watchlist")
+                        }
                     }}
                 />
 
