@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-import CustomDropdown from "./CustomDropdown.tsx";
 
 type CreateWatchlistModalProps = {
     isOpen: boolean;
@@ -13,15 +12,12 @@ export default function CreateWatchlistModal({isOpen, onClose, onCreated,}: Crea
     const [description, setDescription] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [selected, setSelected] = useState("");
-
-    const options = ["MOVIE", "SERIES", "ANIME"];
 
     if (!isOpen) return null;
 
     const handleSave = async () => {
         if (!name.trim()) {
-            setError("Name darf nicht leer sein");
+            setError("Name cant be empty");
             return;
         }
 
@@ -33,8 +29,7 @@ export default function CreateWatchlistModal({isOpen, onClose, onCreated,}: Crea
                 "/api/watchlist",
                 {
                     name: name.trim(),
-                    description: description.trim(),
-                    type: selected,
+                    description: description.trim()
                 },
                 { withCredentials: true }
             );
@@ -49,7 +44,7 @@ export default function CreateWatchlistModal({isOpen, onClose, onCreated,}: Crea
             }
         } catch (err) {
             console.error(err);
-            setError("Fehler beim Erstellen der Watchlist");
+            setError("Error creating watchlist\n");
             setLoading(false);
         }
     };
@@ -57,12 +52,12 @@ export default function CreateWatchlistModal({isOpen, onClose, onCreated,}: Crea
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
-                <h2>Neue Watchlist erstellen</h2>
+                <h2>Create new Watchlist!</h2>
 
                 <input
                     className={"model-items"}
                     type="text"
-                    placeholder="Name"
+                    placeholder="Watchlist name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
 
@@ -70,16 +65,9 @@ export default function CreateWatchlistModal({isOpen, onClose, onCreated,}: Crea
 
                 <textarea
                     className={"model-items"}
-                    placeholder="Beschreibung"
+                    placeholder="Description..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                />
-
-                <CustomDropdown
-                    options={options}
-                    selected={selected}
-                    onSelect={(value) => setSelected(value)}
-                    placeholder="Bitte Watchlist Typ wählen!"
                 />
 
                 {error && <p style={{ color: "red" }}>{error}</p>}
