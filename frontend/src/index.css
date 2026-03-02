@@ -431,6 +431,7 @@ body {
     padding: 0.5rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     transition: background-color 0.2s ease;
+    min-height: 450px;
 }
 
 .watchlist-grid {
@@ -510,12 +511,20 @@ body {
 
 .watchlist-card-top {
     display: flex;
+    flex-direction: row;
+}
+
+.watchlist-card-top-text {
+    display: flex;
     flex-direction: column;
 }
 
+.watchlist-card-top-button {
+    margin-left: auto;
+}
+
 .watchlist-card-bottom {
-    bottom: 0;
-    right: 10px;
+    margin-top: auto;
 }
 
 .watchlist-card-buttons {
@@ -569,3 +578,16 @@ body {
     padding-left: 10px;
     font-family: "Arial", serif;
 }
+
+.empty-watchlist {
+    display: flex;
+    justify-content: center;
+    margin-top: 8%;
+}
+
+.create-first-watchlist {
+    display: flex;
+    justify-content: center;
+    margin-top: 15%;
+}
+
