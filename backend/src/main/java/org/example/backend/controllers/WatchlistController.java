@@ -55,4 +55,14 @@ public class WatchlistController {
     public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @RequestBody Item movieID, @AuthenticationPrincipal OAuth2User user) {
         return service.deleteMovieFromWatchlist(watchlistID, movieID, user.getName());
     }
+
+    @GetMapping("/{watchlistID}/{movieID}")
+    public Item getMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID, @AuthenticationPrincipal OAuth2User user) {
+        return service.getMovieFromWatchlist(watchlistID, movieID, user.getName());
+    }
+
+    @PutMapping("/{watchlistID}/{movieID}/{newRating}")
+    public boolean changeMovieRating(@PathVariable String watchlistID, @PathVariable String movieID, @PathVariable double newRating, @AuthenticationPrincipal OAuth2User user) {
+        return service.changeMovieRating(watchlistID, movieID, newRating, user.getName());
+    }
 }
