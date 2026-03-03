@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CreateWatchlistModal from "./components/CreateWatchlistModal.tsx";
+import {FaPlus} from "react-icons/fa";
 
 type NavbarProps = {
     setSearchQuery: (v: string) => void;
@@ -83,7 +84,7 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                 </button>
 
                 {user && (
-                    <button className="btn-secondary" onClick={() => setModalOpen(true)}>➕</button>
+                    <button className="btn-secondary" onClick={() => setModalOpen(true)}><FaPlus/></button>
                 )}
 
                 <CreateWatchlistModal
