@@ -97,4 +97,42 @@ public class WatchlistService {
         repo.save(watchlist.withItems(updatedItems));
         return true;
     }
+
+    public Item getMovieFromWatchlist(String watchlistID, String movieID, String userID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
+
+        for(Item item : watchlist.items()) {
+            if(item.itemID().equals(movieID)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public boolean changeMovieRating(String watchlistID, String movieID, double newRating, String userID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
+
+        List<Item> updatedItems = watchlist.items().stream()
+                .map(item -> {
+                    if (item.itemID().equals(movieID)) {
+                        return item.withRating(newRating);
+                    }
+                    return item;
+                })
+                .toList();
+
+        Watchlist updatedWatchlist = watchlist.withItems(updatedItems);
+
+        repo.save(updatedWatchlist);
+
+        return true;
+    }
 }
