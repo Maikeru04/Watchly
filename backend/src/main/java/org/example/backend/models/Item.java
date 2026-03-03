@@ -1,4 +1,7 @@
 package org.example.backend.models;
 
-public record Item(String itemID, String media_type) {
+import lombok.With;
+
+@With
+public record Item(String itemID, String media_type, double rating) {
 }
