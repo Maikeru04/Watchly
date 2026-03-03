@@ -36,7 +36,7 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
     const handleSave = async () => {
 
         if (!selected) {
-            setError("Bitte wähle eine Watchlist aus.");
+            setError("Please choose a Watchlist.");
             return;
         }
 
@@ -44,12 +44,12 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
         const watchlistToUpdate = watchlists.find(w => w.name === selected);
 
         if (!watchlistToUpdate) {
-            setError("Watchlist nicht gefunden.");
+            setError("Watchlist not found.");
             return;
         }
 
         if(watchlistToUpdate.items.some(item => item.itemID === `${movie.id}`)) {
-            setError("Dieser Film ist bereits in der ausgewählten Watchlist.")
+            setError("This Item is already in your selected Watchlist.")
             return;
         }
 
@@ -57,7 +57,8 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
         try {
             await axios.post(`/api/watchlist/${watchlistToUpdate?.id}/movie`, {
                     "itemID": `${movie.id}`,
-                    "media_type": `${media_type}`
+                    "media_type": `${media_type}`,
+                    "rating": 0
                 },
                 { withCredentials: true }
             );
@@ -69,7 +70,7 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
             }
         } catch (err) {
             console.error(err);
-            setError("Fehler beim Speichern.");
+            setError("Error while saving.");
         } finally {
             setLoading(false);
         }
@@ -118,17 +119,17 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
                         options={options}
                         selected={selected}
                         onSelect={(value) => setSelected(value)}
-                        placeholder="Bitte Watchlist wählen!"
+                        placeholder="Choose your Watchlist!"
                     />
 
                     {error && <p style={{ color: "white" }}>{error}</p>}
 
                     <div className={"modal-bottom"}>
                         <button className={"btn-secondary"} onClick={onClose} disabled={loading}>
-                            Abbrechen
+                            Exit
                         </button>
                         <button className={"btn-secondary"} onClick={handleSave} disabled={loading}>
-                            {loading ? "Speichern..." : "Speichern"}
+                            {loading ? "Saving..." : "Save"}
                         </button>
                     </div>
                 </div>
@@ -140,7 +141,7 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
             <div className="modal-overlay" onClick={onClose}>
                 <div className="modal-login" onClick={(e) => e.stopPropagation()}>
 
-                    <h2>Bitte melde dich an!</h2>
+                    <h2>Please Login!</h2>
 
                     <button className="btn-secondary" onClick={login}>
                         Login with Github

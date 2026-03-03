@@ -1,6 +1,9 @@
 import type {Movie} from "../types/Movie.ts";
 import axios from "axios";
 import type {Series} from "../types/Series.ts";
+import {useEffect, useState} from "react";
+import type {Item} from "../types/Item.ts";
+import StarRating from "./StarRating.tsx";
 
 type MovieWatchlistCardProps = {
     movie: Movie | Series
@@ -10,6 +13,7 @@ type MovieWatchlistCardProps = {
 export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCardProps) {
     const isMovie = movie.media_type === "movie";
     const date = isMovie ? movie.release_date : movie.first_air_date;
+    const [item, setItem] = useState<Item | null>(null)
 
     function removeFromWatchlist() {
         axios.delete(`/api/watchlist/${watchlistID}/movie`, {
@@ -21,7 +25,21 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
         window.location.reload()
     }
 
+    function changeRatingOnMovie(newRating: number) {
+        axios.put(`/api/watchlist/${watchlistID}/${movie.id}/${newRating}`)
+            .then(() => {
+                setItem(prev =>
+                    prev ? { ...prev, rating: newRating } : prev
+                );
+            });
+    }
+    useEffect(() => {
+        axios.get(`/api/watchlist/${watchlistID}/${movie.id}`)
+            .then((res) => setItem(res.data))
+    }, [movie.id, watchlistID]);
+    
     return(
+        <>
         <div className="watchlist-card-movies"
              draggable
              onDragStart={(e) => {
@@ -37,9 +55,22 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                         {isMovie ? "Release:" : "First Air:"}{" "}
                         {date ? `${date.split("-")[2]}.${date.split("-")[1]}.${date.split("-")[0]}` : ""}
                     </p>
-                    <p>Rating: {Math.round(movie.vote_average * 10) / 10} / 10⭐</p>
-                </div>
+                    <p>IMDb Rating: {Math.round(movie.vote_average * 10) / 10} / 10⭐</p>
 
+                    {item && item?.rating !== 0 ? (
+                        <>
+                            <p>Personal Rating: {item?.rating} / 10⭐</p>
+                            <button></button>
+                        </>
+                    ) : (
+                        <StarRating
+                            value={item?.rating ?? 0}
+                            onChange={(newRating) => {
+                                changeRatingOnMovie(newRating)
+                            }}
+                        />
+                        )}
+                </div>
                 <div className="watchlist-card-poster">
                     <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt="poster" />
                 </div>
@@ -48,5 +79,9 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                     <button className="btn" onClick={removeFromWatchlist}>Remove from Watchlist</button>
                 </div>
         </div>
+
+        </>
+
+
     )
 }

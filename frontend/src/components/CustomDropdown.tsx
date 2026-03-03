@@ -24,7 +24,7 @@ export default function CustomDropdown({ options, selected, onSelect, placeholde
     return (
         <div ref={dropdownRef} className={"modal-dropdown"}>
             <button type="button" onClick={() => setIsOpen(!isOpen)} className={"modal-dropdown"}>
-                {selected || <span style={{ color: "gray" }}>{placeholder}</span>} ▾
+                {selected || <span style={{ color: "gray" }}>{placeholder}</span>}
             </button>
 
             {isOpen && (
