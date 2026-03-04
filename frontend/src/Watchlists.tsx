@@ -37,7 +37,7 @@ export default function Watchlists() {
                             <WatchlistCard key={watchlist.id} watchlist={watchlist} onUpdate={loadWatchlists}/>
                         ))}
                     {completed ? (
-                        <WatchlistCard key="Completed" watchlist={watchlists.find(w => w.id === "Completed")!} onUpdate={loadWatchlists}/>
+                        <WatchlistCard key="Completed" watchlist={completed} onUpdate={loadWatchlists}/>
                     ) : null
                     }
                 </div>

@@ -58,9 +58,7 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                     <p>IMDb Rating: {Math.round(movie.vote_average * 10) / 10} / 10⭐</p>
 
                     {item && item?.rating !== 0 ? (
-                        <>
-                            <p>Personal Rating: {item?.rating} / 10⭐</p>
-                        </>
+                        <p>Personal Rating: {item?.rating} / 10⭐</p>
                     ) : (
                         <StarRating
                             value={item?.rating ?? 0}
