@@ -15,11 +15,12 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
     const date = isMovie ? movie.release_date : movie.first_air_date;
     const [item, setItem] = useState<Item | null>(null)
 
-    function removeFromWatchlist() {
-        axios.delete(`/api/watchlist/${watchlistID}/movie`, {
+    async function removeFromWatchlist() {
+        await axios.delete(`/api/watchlist/${watchlistID}/movie`, {
             data: {
                 itemID: `${movie.id}`,
-                media_type: isMovie ? "movie" : "series"
+                media_type: isMovie ? "movie" : "series",
+                rating: `${item?.rating}`
             }
         });
         window.location.reload()
@@ -60,7 +61,6 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                     {item && item?.rating !== 0 ? (
                         <>
                             <p>Personal Rating: {item?.rating} / 10⭐</p>
-                            <button></button>
                         </>
                     ) : (
                         <StarRating
