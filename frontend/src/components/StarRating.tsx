@@ -18,7 +18,7 @@ export default function StarRating({ max = 10, value = 0, onChange }: Readonly<S
 
     return (
         <div className="star-container">
-            {[...Array(max)].map((_, i) => {
+            {Array.from({ length: max }).map((_, i) => {
                 const starValue = i + 1;
 
                 return (
