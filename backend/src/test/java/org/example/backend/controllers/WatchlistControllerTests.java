@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import org.example.backend.models.Item;
 import org.example.backend.models.Watchlist;
 import org.example.backend.repositories.WatchlistRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,8 @@ public class WatchlistControllerTests {
         repo.deleteAll();
     }
 
+    private final Item item = new Item("1", "movie", 0);
+
     @Test
     void getAllWatchlistsByUser_shouldReturnWatchlistsForUser() throws Exception {
         Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", new ArrayList<>(), "MOVIE");
@@ -51,7 +54,7 @@ public class WatchlistControllerTests {
                                 "userId": "1",
                                 "name": "Test Watchlist",
                                 "description": "Das ist eine Test Watchlist",
-                                "itemIDs": [],
+                                "items": [],
                                 "type": "MOVIE"
                              }
                           ]
@@ -76,7 +79,7 @@ public class WatchlistControllerTests {
                                         "userId": "1",
                                         "name": "Test Watchlist",
                                         "description": "Das ist eine Test Watchlist",
-                                        "itemIDs": [],
+                                        "items": [],
                                         "type": "MOVIE"
                                      }
         
@@ -148,7 +151,7 @@ public class WatchlistControllerTests {
                                         "userId": "1",
                                         "name": "Geänderte Test Watchlist",
                                         "description": "Das ist eine geänderte Test Watchlist",
-                                        "itemIDs": [],
+                                        "items": [],
                                         "type": "MOVIE"
                                      }
         
@@ -189,7 +192,18 @@ public class WatchlistControllerTests {
         Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", new ArrayList<>(), "MOVIE");
         repo.save(watchlist);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/watchlist/1/movie/1")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/watchlist/1/movie")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                     {
+                                       "itemID": "1",
+                                       "media_type": "movie",
+                                       "rating": 0
+                                     }
+        
+                                """
+                        )
                 .with(oauth2Login()
                         .attributes(attrs -> attrs.put("sub", "1"))))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -200,19 +214,23 @@ public class WatchlistControllerTests {
                                         "userId": "1",
                                         "name": "Test Watchlist",
                                         "description": "Das ist eine Test Watchlist",
-                                        "itemIDs": [
-                                          "1"
+                                        "items": [
+                                          {
+                                              "itemID": "1",
+                                              "media_type": "movie",
+                                              "rating": 0
+                                     }
                                         ],
                                         "type": "MOVIE"
                                      }
-        
-        """
+       \s
+       \s"""
                 ));
     }
 
     @Test
     void addMovieToWatchlist_shouldReturn404IfWatchlistNotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/watchlist/1/movie/1")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/watchlist/1/movie/")
                         .with(oauth2Login()
                                 .attributes(attrs -> attrs.put("sub", "1"))))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -220,21 +238,44 @@ public class WatchlistControllerTests {
 
     @Test
     void deleteMovieFromWatchlist_shouldReturnTrueIfSuccessfull() throws Exception {
-        List<String> ids = List.of("1", "2", "3", "4", "5");
+        List<Item> ids = List.of(item);
         Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", ids, "MOVIE");
+        Watchlist completed = new Watchlist("Completed", "1", "Completed", "...", new ArrayList<>(), "Completed");
         repo.save(watchlist);
+        repo.save(completed);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/watchlist/1/movie/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/watchlist/1/movie")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                     {
+                                       "itemID": "1",
+                                       "media_type": "movie",
+                                       "rating": 0
+                                     }
+        
+                                """
+                        )
                         .with(oauth2Login()
                                 .attributes(attrs -> attrs.put("sub", "1"))))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().string("true"));
-
     }
 
     @Test
     void deleteMovieFromWatchlist_shouldReturn404IfWatchlistNotFound() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/watchlist/1/movie/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/watchlist/1/movie")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                     {
+                                       "itemID": "1",
+                                       "media_type": "movie",
+                                       "rating": 0
+                                     }
+        
+                                """
+                        )
                         .with(oauth2Login()
                                 .attributes(attrs -> attrs.put("sub", "1"))))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

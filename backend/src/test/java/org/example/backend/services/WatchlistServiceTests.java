@@ -2,6 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.exceptions.WatchlistNotFoundException;
+import org.example.backend.models.Item;
 import org.example.backend.models.Watchlist;
 import org.example.backend.repositories.WatchlistRepository;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,10 @@ public class WatchlistServiceTests {
     private final WatchlistService service = new WatchlistService(mockRepo);
 
     private final Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", new ArrayList<>(), "MOVIE");
-    private final Watchlist watchlistWithItemIDs = new Watchlist("2", "1", "Test Watchlist", "Das ist eine Test Watchlist", List.of("1", "2", "3"), "MOVIE");
+    private final Item item = new Item("1", "movie", 0);
+    private final Watchlist watchlistWithItems = new Watchlist("2", "1", "Test Watchlist", "Das ist eine Test Watchlist", List.of(item), "MOVIE");
     private final WatchlistInDto watchlistInDto = new WatchlistInDto("Test Watchlist", "Das ist eine Test Watchlist", "MOVIE");
+    private final Watchlist completed = new Watchlist("Completed", "1", "Completed", "Movies you already completed will land here!", new ArrayList<>(), "Completed");
 
     @Test
     void getAllWatchlists_shouldReturnWatchlists() {
@@ -136,23 +139,24 @@ public class WatchlistServiceTests {
     @Test
     void addMovieToWatchlist_ShouldReturnUpdatedWatchlist() {
         //GIVEN
-        List<String> id = List.of("1");
+        List<Item> items = List.of(item);
+        when(mockRepo.existsById("1")).thenReturn(true);
         when(mockRepo.findById(watchlist.id())).thenReturn(Optional.of(watchlist));
         when(mockRepo.save(any(Watchlist.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         //WHEN
-        Watchlist result = service.addMovieToWatchlist("1", "1", "1");
+        Watchlist result = service.addMovieToWatchlist("1", item, "1");
 
         //THEN
         assertThat(result).isNotNull();
-        assertThat(result.itemIDs()).isEqualTo(id);
+        assertThat(result.items()).isEqualTo(items);
         verify(mockRepo).findById("1");
         verify(mockRepo).save(any(Watchlist.class));
     }
 
     @Test
     void addMovieToWatchlist_shouldThrowExceptionIfWatchlistNotFound() {
-        assertThatThrownBy(() -> service.addMovieToWatchlist("", "", ""))
+        assertThatThrownBy(() -> service.addMovieToWatchlist("", item, ""))
                 .isInstanceOf(WatchlistNotFoundException.class)
                 .hasMessage("Watchlist mit ID  nicht gefunden");
     }
@@ -160,11 +164,13 @@ public class WatchlistServiceTests {
     @Test
     void deleteMovieFromWatchlist_shouldReturnTrueIfSuccessfull() {
         //GIVEN
-        when(mockRepo.existsById(watchlistWithItemIDs.id())).thenReturn(true);
-        when(mockRepo.findById(watchlistWithItemIDs.id())).thenReturn(Optional.of(watchlist));
+        when(mockRepo.existsById(watchlistWithItems.id())).thenReturn(true);
+        when(mockRepo.existsById("Completed")).thenReturn(true);
+        when(mockRepo.findById(watchlistWithItems.id())).thenReturn(Optional.of(watchlist));
+        when(mockRepo.findById("Completed")).thenReturn(Optional.of(completed));
 
         //WHEN
-        boolean result = service.deleteMovieFromWatchlist("2", "1", "1");
+        boolean result = service.deleteMovieFromWatchlist("2", item, "1");
 
         //THEN
         assertTrue(result);
@@ -174,9 +180,8 @@ public class WatchlistServiceTests {
 
     @Test
     void deleteMovieFromWatchlist_shouldThrowExceptionIfWatchlistNotFound() {
-        assertThatThrownBy(() -> service.deleteMovieFromWatchlist("", "", ""))
+        assertThatThrownBy(() -> service.deleteMovieFromWatchlist("", item, ""))
                 .isInstanceOf(WatchlistNotFoundException.class)
                 .hasMessage("Watchlist mit ID  nicht gefunden");
     }
-
 }
