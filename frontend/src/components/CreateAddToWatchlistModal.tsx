@@ -22,9 +22,10 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
 
     const isMovie = movie.media_type === "movie";
 
-    const options:string[] = watchlists.map((watchlist) => (
-        watchlist.name
-    ))
+    const options: string[] = watchlists
+        .filter((watchlist) => watchlist.name !== "Completed")
+        .map((watchlist) => watchlist.name);
+    const optionEmpty:string[] = ["You dont have a Watchlist yet!"];
 
     const host =
         window.location.host === "localhost:5173"
@@ -42,6 +43,11 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
 
 
         const watchlistToUpdate = watchlists.find(w => w.name === selected);
+
+        if(selected === "You dont have a Watchlist yet!") {
+            setError("Please create a Watchlist!")
+            return;
+        }
 
         if (!watchlistToUpdate) {
             setError("Watchlist not found.");
@@ -115,20 +121,31 @@ export default function CreateAddToWatchlistModal({isOpen, onClose, onCreated, m
                     : `url(/image_not_found.jpg)`
             }}>
                 <div className="modal-footer-group">
-                    <CustomDropdown
-                        options={options}
-                        selected={selected}
-                        onSelect={(value) => setSelected(value)}
-                        placeholder="Choose your Watchlist!"
-                    />
+                    {options.length > 0 ? (
+                        <CustomDropdown
+                            options={options}
+                            selected={selected}
+                            onSelect={(value) => setSelected(value)}
+                            placeholder="Choose your Watchlist!"
+                        />
+                        ) : (
+                        <CustomDropdown
+                            options={optionEmpty}
+                            selected={selected}
+                            onSelect={(value) => setSelected(value)}
+                            placeholder="You dont have a Watchlist yet!"
+                        />
+                    )
+                    }
+
 
                     {error && <p style={{ color: "white" }}>{error}</p>}
 
                     <div className={"modal-bottom"}>
-                        <button className={"btn-secondary"} onClick={onClose} disabled={loading}>
+                        <button className={"btn"} onClick={onClose} disabled={loading}>
                             Exit
                         </button>
-                        <button className={"btn-secondary"} onClick={handleSave} disabled={loading}>
+                        <button className={"btn"} onClick={handleSave} disabled={loading}>
                             {loading ? "Saving..." : "Save"}
                         </button>
                     </div>

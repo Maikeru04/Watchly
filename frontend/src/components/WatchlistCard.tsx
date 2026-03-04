@@ -4,7 +4,7 @@ import type {Movie} from "../types/Movie.ts";
 import MovieWatchlistCard from "./MovieWatchlistCard.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
+import {FaTrash} from "react-icons/fa";
 
 type WatchlistCardProps = {
     watchlist: Watchlist;
@@ -110,11 +110,13 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
                         <p>{watchlist.description}</p>
                     </div>
                     <div className={"watchlist-card-top-button"}>
-                        <button className={"btn"} onClick={deleteWatchlist}><FaTrash/></button>
+                        {watchlist.id !== "Completed" && (
+                            <button className={"btn"} onClick={deleteWatchlist}><FaTrash/></button>
+                        )}
                     </div>
                 </div>
 
-            {movies.length === 0 ? (
+            {movies.length === 0 && watchlist.id !== "Completed" ? (
                 <div className={"empty-watchlist"}>
                     <button className={"btn"} onClick={navHome}>Browse for movies</button>
                 </div>
