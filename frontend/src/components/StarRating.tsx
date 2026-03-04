@@ -7,7 +7,7 @@ type StarRatingProps = {
     onChange?: (rating: number) => void;
 };
 
-export default function StarRating({max = 10, value = 0, onChange}: StarRatingProps) {
+export default function StarRating({ max = 10, value = 0, onChange }: Readonly<StarRatingProps>) {
     const [hover, setHover] = useState<number | null>(null);
     const [rating, setRating] = useState(value);
 
@@ -18,7 +18,7 @@ export default function StarRating({max = 10, value = 0, onChange}: StarRatingPr
 
     return (
         <div className="star-container">
-            {[...Array(max)].map((_, i) => {
+            {[...new Array(max)].map((_, i) => {
                 const starValue = i + 1;
 
                 return (

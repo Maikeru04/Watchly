@@ -91,8 +91,8 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                     isOpen={modalOpen}
                     onClose={() => setModalOpen(false)}
                     onCreated={() => {
-                        if(window.location.pathname === "/watchlist") {
-                            window.location.reload()
+                        if(globalThis.location.pathname === "/watchlist") {
+                            globalThis.location.reload()
                         } else {
                             nav("/watchlist")
                         }

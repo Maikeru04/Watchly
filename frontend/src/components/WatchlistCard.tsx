@@ -83,7 +83,7 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
 
     function deleteWatchlist() {
         axios.delete(`api/watchlist/${watchlist.id}`)
-        window.location.reload()
+        globalThis.location.reload()
     }
 
     function navHome() {

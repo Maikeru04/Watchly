@@ -21,6 +21,8 @@ export default function Watchlists() {
         loadWatchlists();
     }, []);
 
+    const completed = watchlists.find(w => w.id === "Completed" && w.items.length > 0);
+
     return(
         <>
             {watchlists.filter(w => w.id !== "Completed").length === 0 ? (
@@ -34,9 +36,10 @@ export default function Watchlists() {
                         .map((watchlist) => (
                             <WatchlistCard key={watchlist.id} watchlist={watchlist} onUpdate={loadWatchlists}/>
                         ))}
-                    {watchlists.find(w => w.id === "Completed" && w.items.length > 0) && (
+                    {completed ? (
                         <WatchlistCard key="Completed" watchlist={watchlists.find(w => w.id === "Completed")!} onUpdate={loadWatchlists}/>
-                    )}
+                    ) : null
+                    }
                 </div>
             )}
 
@@ -44,8 +47,8 @@ export default function Watchlists() {
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
                 onCreated={() => {
-                    if(window.location.pathname === "/watchlist") {
-                        window.location.reload()
+                    if(globalThis.location.pathname === "/watchlist") {
+                        globalThis.location.reload()
                     } else {
                         nav("/watchlist")
                     }

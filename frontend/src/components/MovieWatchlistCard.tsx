@@ -40,7 +40,6 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
     }, [movie.id, watchlistID]);
     
     return(
-        <>
         <div className="watchlist-card-movies"
              draggable
              onDragStart={(e) => {
@@ -79,9 +78,5 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                     <button className="btn" onClick={removeFromWatchlist}>Remove from Watchlist</button>
                 </div>
         </div>
-
-        </>
-
-
     )
 }
