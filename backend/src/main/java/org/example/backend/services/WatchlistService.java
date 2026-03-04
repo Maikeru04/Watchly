@@ -90,11 +90,26 @@ public class WatchlistService {
             throw new WatchlistNotFoundException(watchlistID);
         }
         Watchlist watchlist = getWatchlistById(watchlistID, userID);
-
         List<Item> updatedItems = new ArrayList<>(watchlist.items());
         updatedItems.remove(movieID);
 
         repo.save(watchlist.withItems(updatedItems));
+
+        if(!repo.existsById("Completed") && movieID.rating() > 0) {
+            repo.save(new Watchlist("Completed", userID, "Completed", "Movies you already completed will land here!", new ArrayList<Item>(), "Completed"));
+        }
+        Watchlist completed = getWatchlistById("Completed", userID);
+        if(movieID.rating() > 0) {
+            List<Item> updatedCompletedItems = new ArrayList<>(completed.items());
+            updatedCompletedItems.add(movieID);
+            repo.save(completed.withItems(updatedCompletedItems));
+        }
+
+        if(watchlistID.equals(completed.id())) {
+            List<Item> updatedCompletedItems = new ArrayList<>(completed.items());
+            updatedCompletedItems.remove(movieID);
+            repo.save(completed.withItems(updatedCompletedItems));
+        }
         return true;
     }
 
