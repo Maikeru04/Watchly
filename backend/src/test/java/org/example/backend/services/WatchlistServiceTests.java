@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class WatchlistServiceTests {
@@ -54,6 +53,20 @@ public class WatchlistServiceTests {
 
         //THEN
         assertEquals(watchlist, result);
+        verify(mockRepo).findById(watchlist.id());
+    }
+
+    @Test
+    void getWatchlistById_shouldThrowRuntimeException() {
+        //GIVEN
+        when(mockRepo.findById(watchlist.id())).thenReturn(Optional.of(watchlist));
+
+        //WHEN
+        assertThrows(RuntimeException.class, () -> {
+            service.getWatchlistById(watchlist.id(), "2");
+        });
+
+        //THEN
         verify(mockRepo).findById(watchlist.id());
     }
 
@@ -179,9 +192,59 @@ public class WatchlistServiceTests {
     }
 
     @Test
+    void deleteMovieFromWatchlist_shouldCreateCompletedWatchlist() {
+        //GIVEN
+        when(mockRepo.existsById("1")).thenReturn(true);
+        when(mockRepo.existsById("Completed")).thenReturn(false);
+        when(mockRepo.findById("1")).thenReturn(Optional.of(watchlistWithItems));
+        when(mockRepo.findById("Completed")).thenReturn(Optional.of(completed));
+
+        //WHEN
+        service.deleteMovieFromWatchlist("1", new Item("1", "movie", 5), "1");
+
+        //THEN
+        verify(mockRepo, times(3)).save(any(Watchlist.class));
+
+    }
+
+    @Test
+    void deleteMovieFromWatchlist_shouldNotAddToCompleted() {
+        //GIVEN
+        when(mockRepo.existsById("1")).thenReturn(true);
+        when(mockRepo.existsById("Completed")).thenReturn(true);
+        when(mockRepo.findById("1")).thenReturn(Optional.of(watchlistWithItems));
+        when(mockRepo.findById("Completed")).thenReturn(Optional.of(completed));
+
+        //WHEN
+        service.deleteMovieFromWatchlist("1", new Item("1", "movie", 0), "1");
+
+        //THEN
+        verify(mockRepo, never()).save(argThat(w -> w.id().equals("Completed") && w.items().contains(item)));
+    }
+
+    @Test
+    void deleteMovieFromWatchlist_shouldRemoveItemFromCompletedWhenDeletingFromCompleted() {
+        //GIVEN
+        when(mockRepo.existsById("Completed")).thenReturn(true);
+        when(mockRepo.findById("Completed")).thenReturn(Optional.of(completed));
+
+        //WHEN
+        service.deleteMovieFromWatchlist("Completed", item, "1");
+
+        //THEN
+        verify(mockRepo, times(2)).save(any(Watchlist.class));
+    }
+
+    @Test
     void deleteMovieFromWatchlist_shouldThrowExceptionIfWatchlistNotFound() {
+        //GIVEN
+        when(mockRepo.existsById("")).thenReturn(false);
+
+        //WHEN + THEN
         assertThatThrownBy(() -> service.deleteMovieFromWatchlist("", item, ""))
                 .isInstanceOf(WatchlistNotFoundException.class)
                 .hasMessage("Watchlist mit ID  nicht gefunden");
     }
+
+
 }
