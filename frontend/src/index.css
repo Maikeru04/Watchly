@@ -1,10 +1,12 @@
 :root {
     --bg-color: #ffffff;
     --text-color: #111111;
+    --modal-bottom-btn-text: #111111;
 
     --button-bg: #111111;
     --button-text: #ffffff;
     --button-hover: #333333;
+    --modal-bottom-btn-bg: #ffffff;
 
     --button-secondary-bg: #f3f3f3;
     --button-secondary-text: #111111;
@@ -16,15 +18,18 @@
     --input-placeholder: #888888;
     --input-border: #cccccc;
     --input-focus: #111111;
+    --li-hover: lightgrey;
 }
 
 [data-theme="dark"] {
     --bg-color: #121212;
     --text-color: #ffffff;
+    --modal-bottom-btn-text: #111111;
 
-    --button-bg: #ffffff;
+    --button-bg: #e0b329;
     --button-text: #111111;
-    --button-hover: #dddddd;
+    --button-hover: Gold;
+    --modal-bottom-btn-bg: #e0b329;
 
     --button-secondary-bg: #1e1e1e;
     --button-secondary-text: #ffffff;
@@ -36,7 +41,7 @@
     --input-placeholder: #bbbbbb;
     --input-border: #333333;
     --input-focus: #ffffff;
-
+    --li-hover: gray;
 }
 
 body {
@@ -222,6 +227,7 @@ body {
 
 .movie-card:hover {
     transform: scale(1.05);
+    outline: white solid;
 }
 
 .movie-card::after {
@@ -315,6 +321,7 @@ body {
     background: var(--navbar-bg);
     width: 400px;
     z-index: 10000;
+    outline: white solid;
 }
 
 .modal-addwatchlist {
@@ -328,6 +335,7 @@ body {
     background-position: center;
     display: flex;
     flex-direction: column;
+    outline: white solid;
 }
 
 .model-items {
@@ -368,6 +376,10 @@ body {
     margin-top: auto;
 }
 
+.modal-bottom .btn {
+    background-color: var(--modal-bottom-btn-bg);
+    color: var(--modal-bottom-btn-text);
+}
 .modal-footer-group {
     margin-top: auto;
     display: flex;
@@ -378,7 +390,6 @@ body {
 .modal-dropdown {
     position: relative;
     width: 100%;
-    margin-bottom: 10px;
 }
 
 .modal-dropdown ul {
@@ -401,7 +412,9 @@ body {
 }
 
 .modal-dropdown li:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--li-hover);
+    border-radius: 6px;
+    width: 96%;
 }
 
 .modal-dropdown button {
@@ -423,7 +436,7 @@ body {
 .watchlist-card {
     border-radius: 12px;
     overflow: hidden;
-    color: var(--button-bg);
+    color: var(--text-color);
     background-color: var(--navbar-bg);
     display: flex;
     flex-direction: column;
@@ -504,11 +517,14 @@ body {
     padding: 8px;
     border: none;
     border-radius: 12px;
-    background-color: var(--button-secondary-text);
+    background-color: var(--button-bg);
     color: var(--button-secondary-bg);
     cursor: pointer;
 }
 
+.watchlist-card-movies .btn:hover {
+    background-color: var(--button-hover);
+}
 .watchlist-card-top {
     display: flex;
     flex-direction: row;
@@ -517,6 +533,7 @@ body {
 .watchlist-card-top-text {
     display: flex;
     flex-direction: column;
+    padding-left: 20px;
 }
 
 .watchlist-card-top-button {
@@ -525,6 +542,7 @@ body {
 
 .watchlist-card-bottom {
     margin-top: auto;
+    padding-left: 20px;
 }
 
 .watchlist-card-buttons {
@@ -548,11 +566,13 @@ body {
 .media-row {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
+    gap: 1.5rem;
     overflow-x: auto;
     white-space: nowrap;
     flex-wrap: nowrap;
-    padding: 10px;
+    padding: 20px;
+    background: var(--navbar-bg);
+    border-radius: 10px;
 }
 
 .media-row > * {
@@ -573,10 +593,15 @@ body {
 }
 
 .landing-row {
-    background: var(--navbar-bg);
-    border-radius: 10px;
     padding-left: 10px;
     font-family: "Arial", serif;
+
+}
+
+.landing-row-heading {
+    padding-top: 45px;
+    padding-left: 15px;
+    margin: 0;
 }
 
 .empty-watchlist {

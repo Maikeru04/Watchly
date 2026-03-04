@@ -58,7 +58,7 @@ export default function Landingpage() {
     return(
         <>
             <div className={"landing-row"}>
-                <h1>Trending Movies of the Day</h1>
+                <h1 className={"landing-row-heading"}>Trending Movies of the Day</h1>
                 <div className={"media-row"}>
                     {movies?.map((movie) => (
                         <MovieCard key={movie.id} movie={movie} />
@@ -66,7 +66,7 @@ export default function Landingpage() {
                 </div>
             </div>
             <div className={"landing-row"}>
-                <h1>Trending Series of the Day</h1>
+                <h1 className={"landing-row-heading"}>Trending Series of the Day</h1>
                 <div className={"media-row"}>
                     {series?.map((movie) => (
                         <MovieCard key={movie.id} movie={movie} />
@@ -74,7 +74,7 @@ export default function Landingpage() {
                 </div>
             </div>
             <div className={"landing-row"}>
-                <h1>Top Rated Movies</h1>
+                <h1 className={"landing-row-heading"}>Top Rated Movies</h1>
                 <div className={"media-row"}>
                     {moviesTop?.map((movie) => (
                         <MovieCard key={movie.id} movie={movie} />
@@ -82,7 +82,7 @@ export default function Landingpage() {
                 </div>
             </div>
             <div className={"landing-row"}>
-                <h1>Top Rated Series</h1>
+                <h1 className={"landing-row-heading"}>Top Rated Series</h1>
                 <div className={"media-row"}>
                     {seriesTop?.map((movie) => (
                         <MovieCard key={movie.id} movie={movie} />
