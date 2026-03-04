@@ -280,5 +280,69 @@ public class WatchlistControllerTests {
                                 .attributes(attrs -> attrs.put("sub", "1"))))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
+
+    @Test
+    void getMovieFromWatchlist_shouldReturnItemIfSuccessfull() throws Exception {
+        List<Item> ids = List.of(item);
+        Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", ids, "MOVIE");
+        repo.save(watchlist);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/watchlist/1/1")
+                .with(oauth2Login()
+                        .attributes(attrs -> attrs.put("sub", "1"))))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().json(
+                        """
+                                     {
+                                       "itemID": "1",
+                                       "media_type": "movie",
+                                       "rating": 0
+                                     }
+        
+        """
+                ));
+    }
+
+    @Test
+    void getMovieFromWatchlist_shouldReturn404ifWatchlistNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/watchlist/1/1")
+                        .with(oauth2Login()
+                                .attributes(attrs -> attrs.put("sub", "1"))))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void getMovieFromWatchlist_shouldReturnNullifItemNotFound() throws Exception {
+        List<Item> ids = List.of(item);
+        Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", ids, "MOVIE");
+        repo.save(watchlist);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/watchlist/1/2")
+                        .with(oauth2Login()
+                                .attributes(attrs -> attrs.put("sub", "1"))))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(""));
+    }
+
+    @Test
+    void changeMovieRating_shouldReturnTrueIfSuccessfull() throws Exception {
+        List<Item> ids = List.of(item);
+        Watchlist watchlist = new Watchlist("1", "1", "Test Watchlist", "Das ist eine Test Watchlist", ids, "MOVIE");
+        repo.save(watchlist);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/watchlist/1/1/5")
+                .with(oauth2Login()
+                        .attributes(attrs -> attrs.put("sub", "1"))))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void changeMovieRating_shouldThrow404IfWatchlistNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/watchlist/1/1/5")
+                        .with(oauth2Login()
+                                .attributes(attrs -> attrs.put("sub", "1"))))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }
 
