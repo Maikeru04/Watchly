@@ -223,8 +223,8 @@ public class WatchlistControllerTests {
                                         ],
                                         "type": "MOVIE"
                                      }
-       \s
-       \s"""
+       
+       """
                 ));
     }
 
