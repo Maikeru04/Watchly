@@ -13,8 +13,8 @@ export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, wa
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [name, setName] = useState<string>(watchlist.name);
-    const [description, setDescription] = useState<string>(watchlist.description);
+    const [newName, setnewName] = useState<string>(watchlist.name);
+    const [newDescription, setnewDescription] = useState<string>(watchlist.description);
 
     if (!isOpen) return null;
 
@@ -22,15 +22,15 @@ export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, wa
 
         try {
             await axios.put(`/api/watchlist/${watchlist.id}`, {
-                    "name": `${name}`,
-                    "description": `${description}`,
+                    "name": `${newName}`,
+                    "description": `${newDescription}`,
                     "type": ""
                 },
                 { withCredentials: true }
             );
 
-            setName("");
-            setDescription("");
+            setnewName("");
+            setnewDescription("");
             setLoading(false);
             onClose();
 
@@ -51,17 +51,17 @@ export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, wa
                     <input
                         className={"model-items"}
                         type="text"
-                        placeholder="Watchlist name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Enter new watchlist name"
+                        value={newName}
+                        onChange={(e) => setnewName(e.target.value)}
 
                     />
 
                     <textarea
                         className={"model-items"}
-                        placeholder="Description..."
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Enter new description..."
+                        value={newDescription}
+                        onChange={(e) => setnewDescription(e.target.value)}
                     />
 
                     {error && <p style={{ color: "white" }}>{error}</p>}
