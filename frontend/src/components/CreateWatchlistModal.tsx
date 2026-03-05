@@ -77,7 +77,7 @@ export default function CreateWatchlistModal({isOpen, onClose, onCreated,}: Crea
                         Abbrechen
                     </button>
                     <button className={"btn"} onClick={handleSave} disabled={loading}>
-                        {loading ? "Speichern..." : "Speichern"}
+                        {loading ? "Saving..." : "Save"}
                     </button>
                 </div>
             </div>
