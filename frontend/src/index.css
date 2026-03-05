@@ -540,6 +540,10 @@ body {
     margin-left: auto;
 }
 
+.watchlist-card-top-button .btn {
+    margin-left: 8px;
+}
+
 .watchlist-card-bottom {
     margin-top: auto;
     padding-left: 20px;

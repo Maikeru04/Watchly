@@ -4,7 +4,8 @@ import type {Movie} from "../types/Movie.ts";
 import MovieWatchlistCard from "./MovieWatchlistCard.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {FaTrash} from "react-icons/fa";
+import {FaPen, FaTrash} from "react-icons/fa";
+import CreateEditWatchlistModal from "./CreateEditWatchlistModal.tsx";
 
 type WatchlistCardProps = {
     watchlist: Watchlist;
@@ -16,7 +17,9 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
     const [isDragOver, setIsDragOver] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
     const nav = useNavigate();
+
     useEffect(() => {
         async function fetchMovies() {
             try {
@@ -82,8 +85,12 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
     }
 
     function deleteWatchlist() {
-        axios.delete(`api/watchlist/${watchlist.id}`)
+        axios.delete(`/api/watchlist/${watchlist.id}`)
         globalThis.location.reload()
+    }
+
+    function editWatchlist() {
+        setModalOpen(true);
     }
 
     function navHome() {
@@ -111,7 +118,11 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
                     </div>
                     <div className={"watchlist-card-top-button"}>
                         {watchlist.id !== "Completed" && (
-                            <button className={"btn"} onClick={deleteWatchlist}><FaTrash/></button>
+                            <>
+                                <button className={"btn"} onClick={editWatchlist}><FaPen/></button>
+                                <button className={"btn"} onClick={deleteWatchlist}><FaTrash/></button>
+
+                            </>
                         )}
                     </div>
                 </div>
@@ -128,7 +139,18 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
                 <div className={"watchlist-card-bottom"}>
                     <p>{watchlist.id}</p>
                 </div>
+
+            {modalOpen && <CreateEditWatchlistModal
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                onCreated={() => {
+                    globalThis.location.reload()
+                }}
+                watchlist={watchlist}
+            />}
             </div>
+
+
 
     );
 }
