@@ -46,7 +46,6 @@ export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, wa
     };
 
     return (
-        <>
             <div className="modal-overlay" onClick={onClose}>
                 <div className={"modal"} onClick={(e) => e.stopPropagation()}>
                     <input
@@ -77,6 +76,5 @@ export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, wa
                     </div>
                 </div>
             </div>
-        </>
     )
 }
