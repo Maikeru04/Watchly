@@ -2,14 +2,14 @@ import axios from "axios";
 import {useState} from "react";
 import type {Watchlist} from "../types/Watchlist.ts";
 
-type CreateEditWatchlistModal = {
+type CreateEditWatchlistModalProps = {
     isOpen: boolean;
     onClose: () => void;
     onCreated?: () => void;
     watchlist:Watchlist;
 };
 
-export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, watchlist}:CreateEditWatchlistModal) {
+export default function CreateEditWatchlistModal({isOpen, onClose, onCreated, watchlist}: Readonly<CreateEditWatchlistModalProps>) {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
