@@ -21,25 +21,25 @@ export default function Watchlists() {
         loadWatchlists();
     }, []);
 
+    const normalWatchlists = watchlists.filter(w => w.id !== "Completed");
     const completed = watchlists.find(w => w.id === "Completed" && w.items.length > 0);
 
     return(
         <>
-            {watchlists.filter(w => w.id !== "Completed").length === 0 ? (
+            {normalWatchlists.length === 0 && !completed ? (
                 <div className={"create-first-watchlist"}>
-                    <button className="btn-secondary" onClick={() => setModalOpen(true)}>Create your first Watchlist!</button>
+                    <button className="btn-secondary" onClick={() => setModalOpen(true)}>
+                        Create your first Watchlist!
+                    </button>
                 </div>
             ) : (
                 <div className={"watchlist-grid"}>
-                    {watchlists
-                        .filter(w => w.id !== "Completed")
-                        .map((watchlist) => (
-                            <WatchlistCard key={watchlist.id} watchlist={watchlist} onUpdate={loadWatchlists}/>
-                        ))}
-                    {completed ? (
+                    {normalWatchlists.map((watchlist) => (
+                        <WatchlistCard key={watchlist.id} watchlist={watchlist} onUpdate={loadWatchlists}/>
+                    ))}
+                    {completed && (
                         <WatchlistCard key="Completed" watchlist={completed} onUpdate={loadWatchlists}/>
-                    ) : null
-                    }
+                    )}
                 </div>
             )}
 
