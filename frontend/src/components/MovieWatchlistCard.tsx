@@ -46,6 +46,7 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                  e.dataTransfer.setData("movieId", movie.id.toString());
                  e.dataTransfer.setData("fromWatchlist", watchlistID);
                  e.dataTransfer.setData("media_type", movie.media_type);
+                 e.dataTransfer.setData("rating", (item?.rating ?? "").toString());
              }}>
             <div className="watchlist-card-content">
 
