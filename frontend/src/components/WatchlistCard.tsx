@@ -61,6 +61,7 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
         const movieId = e.dataTransfer.getData("movieId");
         const fromWatchlist = e.dataTransfer.getData("fromWatchlist");
         const mediaType = e.dataTransfer.getData("media_type");
+        const rating = e.dataTransfer.getData("rating");
 
         if (!movieId || !fromWatchlist || fromWatchlist === targetWatchlistId) return;
 
@@ -68,13 +69,15 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
             await axios.delete(`/api/watchlist/${fromWatchlist}/movie`, {
                 data: {
                     itemID: movieId,
-                    media_type: mediaType
+                    media_type: mediaType,
+                    rating: rating
                 }
             });
 
             await axios.post(`/api/watchlist/${targetWatchlistId}/movie`, {
                 itemID: movieId,
-                media_type: mediaType
+                media_type: mediaType,
+                rating: rating
             }, { withCredentials: true });
 
             onUpdate()
