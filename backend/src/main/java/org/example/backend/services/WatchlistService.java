@@ -2,6 +2,7 @@ package org.example.backend.services;
 
 import org.example.backend.dtos.WatchlistInDto;
 import org.example.backend.exceptions.WatchlistNotFoundException;
+import org.example.backend.models.Item;
 import org.example.backend.models.Watchlist;
 import org.example.backend.repositories.WatchlistRepository;
 import org.springframework.stereotype.Service;
@@ -72,25 +73,82 @@ public class WatchlistService {
 
     // MOVIE SECTION
 
-    public Watchlist addMovieToWatchlist(String watchlistID, String movieID, String userID) {
-        Watchlist watchlist = repo.findById(watchlistID).orElseThrow(() -> new WatchlistNotFoundException(watchlistID));
-
-        List<String> updated = new ArrayList<>(watchlist.itemIDs());
-        updated.add(movieID);
-
-        return repo.save(watchlist.withItemIDs(updated));
-    }
-
-    public boolean deleteMovieFromWatchlist(String watchlistID, String movieID, String userID) {
+    public Watchlist addMovieToWatchlist(String watchlistID, Item movieID, String userID) {
         if(!repo.existsById(watchlistID)) {
             throw new WatchlistNotFoundException(watchlistID);
         }
         Watchlist watchlist = getWatchlistById(watchlistID, userID);
 
-        List<String> updatedItems = new ArrayList<>(watchlist.itemIDs());
+        List<Item> updated = new ArrayList<>(watchlist.items());
+        updated.add(movieID);
+
+        return repo.save(watchlist.withItems(updated));
+    }
+
+    public boolean deleteMovieFromWatchlist(String watchlistID, Item movieID, String userID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+        String completedID = "Completed";
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
+        List<Item> updatedItems = new ArrayList<>(watchlist.items());
         updatedItems.remove(movieID);
 
-        repo.save(watchlist.withItemIDs(updatedItems));
+        repo.save(watchlist.withItems(updatedItems));
+
+        if(!repo.existsById(completedID) && movieID.rating() > 0) {
+            repo.save(new Watchlist(completedID, userID, "Completed", "Movies you already completed will land here!", new ArrayList<>(), "X"));
+        }
+        Watchlist completed = getWatchlistById(completedID, userID);
+        if(movieID.rating() > 0) {
+            List<Item> updatedCompletedItems = new ArrayList<>(completed.items());
+            updatedCompletedItems.add(movieID);
+            repo.save(completed.withItems(updatedCompletedItems));
+        }
+
+        if(watchlistID.equals(completed.id())) {
+            List<Item> updatedCompletedItems = new ArrayList<>(completed.items());
+            updatedCompletedItems.remove(movieID);
+            repo.save(completed.withItems(updatedCompletedItems));
+        }
+        return true;
+    }
+
+    public Item getMovieFromWatchlist(String watchlistID, String movieID, String userID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
+
+        for(Item item : watchlist.items()) {
+            if(item.itemID().equals(movieID)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public boolean changeMovieRating(String watchlistID, String movieID, double newRating, String userID) {
+        if(!repo.existsById(watchlistID)) {
+            throw new WatchlistNotFoundException(watchlistID);
+        }
+
+        Watchlist watchlist = getWatchlistById(watchlistID, userID);
+
+        List<Item> updatedItems = watchlist.items().stream()
+                .map(item -> {
+                    if (item.itemID().equals(movieID)) {
+                        return item.withRating(newRating);
+                    }
+                    return item;
+                })
+                .toList();
+
+        Watchlist updatedWatchlist = watchlist.withItems(updatedItems);
+
+        repo.save(updatedWatchlist);
+
         return true;
     }
 }

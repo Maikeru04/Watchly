@@ -42,9 +42,7 @@ export default function MovieCard({movie}:MovieCardProps) {
             {modalOpen && <CreateAddToWatchlistModal
                 isOpen={modalOpen}
                 onClose={() => setModalOpen(false)}
-                onCreated={() => {
-
-                }}
+                onCreated={() => {}}
                 movie={movie}
             />}
         </>

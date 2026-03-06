@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import CreateWatchlistModal from "./components/CreateWatchlistModal.tsx";
+import {FaPlus} from "react-icons/fa";
 
 type NavbarProps = {
     setSearchQuery: (v: string) => void;
@@ -71,9 +72,9 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Filmtitel eingeben..."
+                        placeholder="Enter movie title..."
                     />
-                    <button type="submit">Suchen</button>
+                    <button type="submit">Search</button>
                 </form>
             </div>
 
@@ -83,14 +84,18 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                 </button>
 
                 {user && (
-                    <button className="btn-secondary" onClick={() => setModalOpen(true)}>➕</button>
+                    <button className="btn-secondary" onClick={() => setModalOpen(true)}><FaPlus/></button>
                 )}
 
                 <CreateWatchlistModal
                     isOpen={modalOpen}
                     onClose={() => setModalOpen(false)}
                     onCreated={() => {
-                        window.location.reload()
+                        if(globalThis.location.pathname === "/watchlist") {
+                            globalThis.location.reload()
+                        } else {
+                            nav("/watchlist")
+                        }
                     }}
                 />
 

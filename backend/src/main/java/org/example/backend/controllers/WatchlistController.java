@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import org.example.backend.models.Item;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -45,13 +46,23 @@ public class WatchlistController {
         return service.deleteWatchlistById(id);
     }
 
-    @PostMapping("/{watchlistID}/movie/{movieID}")
-    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @PathVariable String movieID, @AuthenticationPrincipal OAuth2User user) {
+    @PostMapping("/{watchlistID}/movie")
+    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @RequestBody Item movieID, @AuthenticationPrincipal OAuth2User user) {
         return service.addMovieToWatchlist(watchlistID, movieID, user.getName());
     }
 
-    @DeleteMapping("/{watchlistID}/movie/{movieID}")
-    public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID, @AuthenticationPrincipal OAuth2User user) {
+    @DeleteMapping("/{watchlistID}/movie")
+    public boolean deleteMovieFromWatchlist(@PathVariable String watchlistID, @RequestBody Item movieID, @AuthenticationPrincipal OAuth2User user) {
         return service.deleteMovieFromWatchlist(watchlistID, movieID, user.getName());
+    }
+
+    @GetMapping("/{watchlistID}/{movieID}")
+    public Item getMovieFromWatchlist(@PathVariable String watchlistID, @PathVariable String movieID, @AuthenticationPrincipal OAuth2User user) {
+        return service.getMovieFromWatchlist(watchlistID, movieID, user.getName());
+    }
+
+    @PutMapping("/{watchlistID}/{movieID}/{newRating}")
+    public boolean changeMovieRating(@PathVariable String watchlistID, @PathVariable String movieID, @PathVariable double newRating, @AuthenticationPrincipal OAuth2User user) {
+        return service.changeMovieRating(watchlistID, movieID, newRating, user.getName());
     }
 }

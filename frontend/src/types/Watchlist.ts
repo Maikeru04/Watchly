@@ -1,8 +1,10 @@
+import type {Item} from "./Item.ts";
+
 export type Watchlist = {
     id: string,
     userId: string,
     name: string,
     description: string,
-    itemIDs: string[],
+    items: Item[],
     type: string
 }
