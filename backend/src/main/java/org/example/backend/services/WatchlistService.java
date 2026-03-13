@@ -85,7 +85,7 @@ public class WatchlistService {
         return repo.save(watchlist.withItems(updated));
     }
 
-    public Watchlist swapMovieBetweenWatchlists(String currentWatchlistID, String targetWatchlistID, Item item, String userID) {
+    public List<Watchlist> swapMovieBetweenWatchlists(String currentWatchlistID, String targetWatchlistID, Item item, String userID) {
         if(!repo.existsById(currentWatchlistID)) {
             throw new WatchlistNotFoundException(currentWatchlistID);
         } else if(!repo.existsById(targetWatchlistID)) {
@@ -101,8 +101,10 @@ public class WatchlistService {
         currentWatchlistItems.remove(item);
         targetWatchlistItems.add(item);
 
-        repo.save(currentWatchlist.withItems(currentWatchlistItems));
-        return repo.save(targetWatchlist.withItems(targetWatchlistItems));
+        return List.of(
+                repo.save(currentWatchlist.withItems(currentWatchlistItems)),
+                repo.save(targetWatchlist.withItems(targetWatchlistItems))
+        );
     }
 
     public boolean deleteMovieFromWatchlist(String watchlistID, Item movieID, String userID) {

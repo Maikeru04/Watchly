@@ -52,7 +52,7 @@ public class WatchlistController {
     }
 
     @PostMapping("/{currentWatchlistID}/{targetWatchlistID}/swap")
-    public Watchlist swapMovieBetweenWatchlists(@PathVariable String currentWatchlistID, @PathVariable String targetWatchlistID, @RequestBody Item item, @AuthenticationPrincipal OAuth2User user) {
+    public List<Watchlist> swapMovieBetweenWatchlists(@PathVariable String currentWatchlistID, @PathVariable String targetWatchlistID, @RequestBody Item item, @AuthenticationPrincipal OAuth2User user) {
         return service.swapMovieBetweenWatchlists(currentWatchlistID, targetWatchlistID, item, user.getName());
     }
 
