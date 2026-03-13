@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 
@@ -147,6 +147,61 @@ public class WatchlistServiceTests {
         assertThatThrownBy(() -> service.deleteWatchlistById(""))
                 .isInstanceOf(WatchlistNotFoundException.class)
                 .hasMessage("Watchlist mit ID  nicht gefunden");
+    }
+
+    @Test
+    void swapMovieBetweenWatchlists_shouldMoveItemBetweenWatchlists() {
+        // GIVEN
+        Watchlist current = new Watchlist("1", "1", "Current", "desc", List.of(item), "MOVIE");
+        Watchlist target = new Watchlist("2", "1", "Target", "desc", new ArrayList<>(), "MOVIE");
+
+        when(mockRepo.existsById("1")).thenReturn(true);
+        when(mockRepo.existsById("2")).thenReturn(true);
+
+        when(mockRepo.findById("1")).thenReturn(Optional.of(current));
+        when(mockRepo.findById("2")).thenReturn(Optional.of(target));
+
+        when(mockRepo.save(any(Watchlist.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // WHEN
+        List<Watchlist> result = service.swapMovieBetweenWatchlists("1", "2", item, "1");
+
+        // THEN
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2);
+
+        Watchlist updatedCurrent = result.get(0);
+        Watchlist updatedTarget = result.get(1);
+
+        assertThat(updatedCurrent.items()).doesNotContain(item);
+        assertThat(updatedTarget.items()).contains(item);
+
+        verify(mockRepo).findById("1");
+        verify(mockRepo).findById("2");
+        verify(mockRepo, times(2)).save(any(Watchlist.class));
+    }
+
+    @Test
+    void swapMovieBetweenWatchlists_shouldThrowExceptionIfCurrentWatchlistNotFound() {
+        // GIVEN
+        when(mockRepo.existsById("1")).thenReturn(false);
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> service.swapMovieBetweenWatchlists("1", "2", item, "1"))
+                .isInstanceOf(WatchlistNotFoundException.class)
+                .hasMessage("Watchlist mit ID 1 nicht gefunden");
+    }
+
+    @Test
+    void swapMovieBetweenWatchlists_shouldThrowExceptionIfTargetWatchlistNotFound() {
+        // GIVEN
+        when(mockRepo.existsById("1")).thenReturn(true);
+        when(mockRepo.existsById("2")).thenReturn(false);
+
+        // WHEN + THEN
+        assertThatThrownBy(() -> service.swapMovieBetweenWatchlists("1", "2", item, "1"))
+                .isInstanceOf(WatchlistNotFoundException.class)
+                .hasMessage("Watchlist mit ID 2 nicht gefunden");
     }
 
     @Test

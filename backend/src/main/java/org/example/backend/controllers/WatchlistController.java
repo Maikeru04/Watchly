@@ -47,8 +47,13 @@ public class WatchlistController {
     }
 
     @PostMapping("/{watchlistID}/movie")
-    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @RequestBody Item movieID, @AuthenticationPrincipal OAuth2User user) {
-        return service.addMovieToWatchlist(watchlistID, movieID, user.getName());
+    public Watchlist addMovieToWatchlist(@PathVariable String watchlistID, @RequestBody Item item, @AuthenticationPrincipal OAuth2User user) {
+        return service.addMovieToWatchlist(watchlistID, item, user.getName());
+    }
+
+    @PostMapping("/{currentWatchlistID}/{targetWatchlistID}/swap")
+    public List<Watchlist> swapMovieBetweenWatchlists(@PathVariable String currentWatchlistID, @PathVariable String targetWatchlistID, @RequestBody Item item, @AuthenticationPrincipal OAuth2User user) {
+        return service.swapMovieBetweenWatchlists(currentWatchlistID, targetWatchlistID, item, user.getName());
     }
 
     @DeleteMapping("/{watchlistID}/movie")

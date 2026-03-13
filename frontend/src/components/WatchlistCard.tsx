@@ -66,15 +66,7 @@ export default function WatchlistCard({ watchlist, onUpdate }: WatchlistCardProp
         if (!movieId || !fromWatchlist || fromWatchlist === targetWatchlistId) return;
 
         try {
-            await axios.delete(`/api/watchlist/${fromWatchlist}/movie`, {
-                data: {
-                    itemID: movieId,
-                    media_type: mediaType,
-                    rating: rating
-                }
-            });
-
-            await axios.post(`/api/watchlist/${targetWatchlistId}/movie`, {
+            await axios.post(`/api/watchlist/${fromWatchlist}/${targetWatchlistId}/swap`, {
                 itemID: movieId,
                 media_type: mediaType,
                 rating: rating
