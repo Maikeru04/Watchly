@@ -91,11 +91,10 @@ export default function Navbar({ setSearchQuery }: NavbarProps) {
                     isOpen={modalOpen}
                     onClose={() => setModalOpen(false)}
                     onCreated={() => {
-                        if(globalThis.location.pathname === "/watchlist") {
-                            globalThis.location.reload()
-                        } else {
-                            nav("/watchlist")
-                        }
+                        nav("/watchlist");
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 50);
                     }}
                 />
 
