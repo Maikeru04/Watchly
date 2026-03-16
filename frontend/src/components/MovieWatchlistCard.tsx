@@ -4,7 +4,6 @@ import type {Series} from "../types/Series.ts";
 import {useEffect, useState} from "react";
 import type {Item} from "../types/Item.ts";
 import StarRating from "./StarRating.tsx";
-import {useNavigate} from "react-router-dom";
 
 type MovieWatchlistCardProps = {
     movie: Movie | Series
@@ -15,7 +14,6 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
     const isMovie = movie.media_type === "movie";
     const date = isMovie ? movie.release_date : movie.first_air_date;
     const [item, setItem] = useState<Item | null>(null)
-    const nav = useNavigate();
 
     async function removeFromWatchlist() {
         await axios.delete(`/api/watchlist/${watchlistID}/movie`, {
@@ -25,7 +23,7 @@ export default function MovieWatchlistCard({movie, watchlistID}:MovieWatchlistCa
                 rating: `${item?.rating}`
             }
         });
-        nav("/watchlist");
+        window.location.reload();
     }
 
     function changeRatingOnMovie(newRating: number) {
